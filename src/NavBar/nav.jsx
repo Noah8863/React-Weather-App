@@ -8,7 +8,7 @@ function NavBar({ setSearchedCity }) {
     setSearchedCity(value);
   };
 
-  const debouncedSearch = debounce(handleSearch, 200);
+  const debouncedSearch = debounce(handleSearch, 100);
 
   const handleChange = (e) => {
     const value = e.target.value;
