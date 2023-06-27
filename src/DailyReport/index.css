@@ -1,9 +1,28 @@
 .locationContainer {
+    position: relative;
+    display: grid;
+    text-align: center;
+    font-size: 22px;
+    padding: 22px;
     background-color: blue;
 }
 .dailyContainer {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto;
+    text-align: center;
+    padding: 24px;
     background-color: pink;
+}
+#currentTemps {
+    display:grid;
+    grid-template-columns: auto auto auto;
+    padding:10px;
 }
 .forecastContainer {
     background-color: cornflowerblue;
+    text-align: center;
+    padding:16px;
+    display:grid;
+    grid-template-columns: auto auto auto auto auto;
 }
