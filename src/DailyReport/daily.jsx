@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import sunnyIcon from "../assets/sun.png";
@@ -9,11 +9,10 @@ import stormIcon from "../assets/storm.png";
 import "../index.css";
 
 function DailyReport({ searchedCity }) {
+  const [icon, setIcon] = useState(null);
   useEffect(() => {
     fetchData(searchedCity);
   }, [searchedCity]);
-
-  let icon;
 
   const fetchData = (searchedCity) => {
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
@@ -41,37 +40,25 @@ function DailyReport({ searchedCity }) {
           console.log(data);
 
           var weatherIcon = data.current.condition.text.toLowerCase();
-          console.log("weatherIcon value:", weatherIcon);
-
           switch (weatherIcon) {
             case "clear":
-              console.log("Setting icon to sunnyIcon");
-              icon = sunnyIcon;
-              console.log(icon);
+              setIcon(sunnyIcon);
               break;
             case "cloudy":
-              console.log("Setting icon to cloudyIcon");
-              icon = cloudyIcon;
-              console.log(icon);
+              setIcon(cloudyIcon);
               break;
             case "partly cloudy":
-              console.log("Setting icon to partlyCloudyIcon");
-              icon = partlyCloudyIcon;
-              console.log(icon);
+              setIcon(partlyCloudyIcon);
               break;
             case "rainy":
-              console.log("Setting icon to rainyIcon");
-              icon = rainyIcon;
-              console.log(icon);
+              setIcon(rainyIcon);
               break;
             case "storm":
-              console.log("Setting icon to stormIcon");
-              icon = stormIcon;
-              console.log(icon);
+              setIcon(stormIcon);
               break;
             default:
-              console.log("Unknown weather condition, setting icon to null");
-              icon = null; // Provide a default icon or handle the case when the condition is unknown
+              setIcon(null);
+              break;
           }
           updateHTML(data);
         }
@@ -87,8 +74,6 @@ function DailyReport({ searchedCity }) {
     const cityName = document.getElementById("cityName");
     const cityState = document.getElementById("cityState");
     const localTime = document.getElementById("localTime");
-
-    console.log(icon)
 
     //Current Temp from search
     const currentTemp = document.getElementById("currentTemp");
@@ -137,14 +122,16 @@ function DailyReport({ searchedCity }) {
 
   return (
     <div className="flex h-screen p-2">
-      <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
-        <div className="h-3/5  ">
+      <div className="w-1/3 h-full bg-red-600 opacity-70 text-center">
+        <div className="h-3/5 ">
           <p id="cityName" style={{ fontSize: 26 }}>
             Denver
           </p>
           <p id="cityState">Colorado</p>
           <p id="localTime">Monday 9:00 AM</p>
-          <div>{icon && <img src={icon} alt="Weather Icon" />}</div>
+          <div className="flex justify-center my-8">
+            {icon && <img src={icon} alt="Weather Icon" className="w-24" />}
+          </div>
         </div>
         <div className="h-2/5 ">Bottom Row</div>
       </div>
