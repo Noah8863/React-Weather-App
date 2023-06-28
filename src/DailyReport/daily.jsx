@@ -32,6 +32,13 @@ function DailyReport({ searchedCity }) {
           // Process the fetched data
           console.log(data);
           updateHTML(data);
+          
+          const temperature = data.current.temp_f;
+          const backgroundColor = getBackgroundColor(temperature);
+          // Apply the background color to your container
+          const weatherContainer = document.getElementById("mainContainer").style.backgroundColor = backgroundColor;
+          weatherContainer.style.transition = "background-color 4s ease";
+          weatherContainer.style.backgroundColor = backgroundColor;
         }
       })
       .catch((error) => {
@@ -41,6 +48,29 @@ function DailyReport({ searchedCity }) {
       });
   };
 
+  const getBackgroundColor = (temp) => {
+    let backgroundColor = "";
+  
+    switch (true) {
+      case temp < 40:
+        backgroundColor = "#264653";
+        break;
+      case temp >= 41 && temp <= 60:
+        backgroundColor = "#2A9D8F";
+        break;
+      case temp >= 61 && temp <= 80:
+        backgroundColor = "#F4A261";
+        break;
+      case temp >= 81 && temp <= 100:
+        backgroundColor = "#E76F51";
+        break;
+      default:
+        backgroundColor = "white";
+    }
+  
+    return backgroundColor;
+  };
+
   function updateHTML(data) {
     //Current Searched City Data
     const cityName = document.getElementById("cityName");
@@ -48,6 +78,7 @@ function DailyReport({ searchedCity }) {
     const localTime = document.getElementById("localTime");
 
     //Current Temp from search
+    const currentTemp = document.getElementById("currentTemp");
     // const weatherIcon = document.getElementById("localTime");
     // const windSpeed = document.getElementById("localTime");
     // const UVIndex = document.getElementById("localTime");
@@ -59,14 +90,14 @@ function DailyReport({ searchedCity }) {
     const day2High = document.getElementById("day2High");
     const day2Low = document.getElementById("day2Low");
 
-    const day3High = document.getElementById("day3High");
-    const day3Low = document.getElementById("day3Low");
+    // const day3High = document.getElementById("day3High");
+    // const day3Low = document.getElementById("day3Low");
 
-    const day4High = document.getElementById("day4High");
-    const day4Low = document.getElementById("day4Low");
+    // const day4High = document.getElementById("day4High");
+    // const day4Low = document.getElementById("day4Low");
 
-    const day5High = document.getElementById("day5High");
-    const day5Low = document.getElementById("day5Low");
+    // const day5High = document.getElementById("day5High");
+    // const day5Low = document.getElementById("day5Low");
 
     //Convert time from Military time
     const localtime = (localTime.textContent = data.location.localtime);
@@ -82,12 +113,13 @@ function DailyReport({ searchedCity }) {
 
     const formattedTime = `${hours}:${minutes} ${meridiem}`;
 
-    console.log(formattedTime); // Output: 5:10 PM
-
     // Update the HTML content with the fetched data
     cityName.textContent = data.location.name;
     cityState.textContent = data.location.region;
     localTime.textContent = `Local Time: ${formattedTime}`;
+
+    //Current Weather Data 
+    currentTemp.textContent = `${data.current.temp_f} F`;
 
     //Update the HTML content for 5 day Forcast Info
     day1High.textContent = data.forecast.forecastday[1].day.maxtemp_f;
@@ -101,7 +133,7 @@ function DailyReport({ searchedCity }) {
 
   return (
     <div>
-      <main className="container mx-auto w-100vw bg-white p-6 rounded-lg shadow-lg">
+      <main id="mainContainer" className="container mx-auto w-100vw bg-white p-6 rounded-lg shadow-lg">
         <div className="locationContainer">
           <p id="cityName" style={{ fontSize: 26 }}>
             Denver
@@ -116,7 +148,7 @@ function DailyReport({ searchedCity }) {
               <KeyboardArrowUpIcon />
               76
             </div>
-            <p style={{ fontSize: 28 }}>74</p>
+            <p id="currentTemp" style={{ fontSize: 28 }}>74</p>
             <div>
               <KeyboardArrowDownIcon />
               61
