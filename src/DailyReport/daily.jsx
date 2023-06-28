@@ -14,6 +14,9 @@ function DailyReport({ searchedCity }) {
   const [localTime, setLocalTime] = useState("9:00 AM");
   const [weatherCondition, setWeatherCondition] = useState("Sunny");
   const [currentTemp, setCurrentTemp] = useState("78 F");
+  const [day1, setDay1] = useState("Monday");
+  const [day2, setDay2] = useState("Tuesday");
+  const [day3, setDay3] = useState("Wednesday");
   const [day1High, setDay1High] = useState("Monday");
   const [day1Low, setDay1Low] = useState("");
   const [day2High, setDay2High] = useState("");
@@ -69,6 +72,9 @@ function DailyReport({ searchedCity }) {
               setIcon(null);
               break;
           }
+          setDay1(data.forecast.forecastday[0].date.split("-").slice(1).join("-"));
+          setDay2(data.forecast.forecastday[1].date.split("-").slice(1).join("-"));
+          setDay3(data.forecast.forecastday[2].date.split("-").slice(1).join("-"));
           setDay1High(data.forecast.forecastday[1].day.maxtemp_f);
           setDay1Low(data.forecast.forecastday[1].day.mintemp_f);
           setDay2High(data.forecast.forecastday[2].day.maxtemp_f);
@@ -106,7 +112,6 @@ function DailyReport({ searchedCity }) {
     setDay2Low(data.forecast.forecastday[2].day.mintemp_f);
   }
 
-
   return (
     <div className="flex h-screen p-2">
       <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
@@ -115,13 +120,21 @@ function DailyReport({ searchedCity }) {
           <p id="cityName" className="text-2xl p-2">
             {cityName}
           </p>
-          <p id="currentTemp" className="text-3xl p-8">{currentTemp}</p>
+          <p id="currentTemp" className="text-3xl p-8">
+            {currentTemp}
+          </p>
           <div className="flex justify-center my-8">
             {icon && <img src={icon} alt="Weather Icon" className="w-1/4" />}
           </div>
-          <p id="weatherCondition" className="text-lg">{weatherCondition}</p>
+          <p id="weatherCondition" className="text-lg">
+            {weatherCondition}
+          </p>
         </div>
-        <div className="h-2/5 ">Bottom Row</div>
+        <div className="h-2/5 flex">
+          <div className="flex-grow bg-red-400 text-xxl pt-8">{day1}</div>
+          <div className="flex-grow bg-green-400 text-xxl pt-8">{day2}</div>
+          <div className="flex-grow bg-pink-400 text-xxl pt-8">{day3}</div>
+        </div>
       </div>
       <div className="w-2/5 h-full bg-gray-600 opacity-70">
         <div className="h-3/5">Top Row</div>
