@@ -9,7 +9,7 @@ function DailyReport({ searchedCity }) {
   }, [searchedCity]);
 
   const fetchData = (searchedCity) => {
-    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=5`;
+    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
     // const url = `https://weatherapi-com.p.rapid`;
 
     const options = {
@@ -49,10 +49,24 @@ function DailyReport({ searchedCity }) {
 
     //Current Temp from search
     // const weatherIcon = document.getElementById("localTime");
-    const windSpeed = document.getElementById("localTime");
-    const UVIndex = document.getElementById("localTime");
+    // const windSpeed = document.getElementById("localTime");
+    // const UVIndex = document.getElementById("localTime");
 
     //5 Day Forecast Variables
+    const day1High = document.getElementById("day1High");
+    const day1Low = document.getElementById("day1Low");
+
+    const day2High = document.getElementById("day2High");
+    const day2Low = document.getElementById("day2Low");
+
+    const day3High = document.getElementById("day3High");
+    const day3Low = document.getElementById("day3Low");
+
+    const day4High = document.getElementById("day4High");
+    const day4Low = document.getElementById("day4Low");
+
+    const day5High = document.getElementById("day5High");
+    const day5Low = document.getElementById("day5Low");
 
     //Convert time from Military time
     const localtime = (localTime.textContent = data.location.localtime);
@@ -74,6 +88,13 @@ function DailyReport({ searchedCity }) {
     cityName.textContent = data.location.name;
     cityState.textContent = data.location.region;
     localTime.textContent = `Local Time: ${formattedTime}`;
+
+    //Update the HTML content for 5 day Forcast Info
+    day1High.textContent = data.forecast.forecastday[1].day.maxtemp_f;
+    day1Low.textContent = data.forecast.forecastday[1].day.mintemp_f;
+
+    day2High.textContent = data.forecast.forecastday[2].day.maxtemp_f;
+    day2Low.textContent = data.forecast.forecastday[2].day.mintemp_f;
 
     // const weatherIcon = data.current.condition.icon
   }
@@ -105,58 +126,38 @@ function DailyReport({ searchedCity }) {
         <div className="forecastContainer">
           <div id="day1">
             <p>Monday</p>
-            <div>
-              <KeyboardArrowUpIcon />
-              76
-            </div>
-            <div>
-              <KeyboardArrowDownIcon />
-              61
-            </div>
+            <div id="day1High">76</div>
+            <KeyboardArrowUpIcon />
+            <KeyboardArrowDownIcon />
+            <div id="day1Low">61</div>
           </div>
           <div id="day2">
             <p>Tuesday</p>
-            <div>
-              <KeyboardArrowUpIcon />
-              76
-            </div>
-            <div>
-              <KeyboardArrowDownIcon />
-              61
-            </div>
+            <div id="day2High">76</div>
+            <KeyboardArrowUpIcon />
+            <KeyboardArrowDownIcon />
+            <div id="day2Low">61</div>
           </div>
           <div id="day3">
             <p>Wednsday</p>
-            <div>
-              <KeyboardArrowUpIcon />
-              76
-            </div>
-            <div>
-              <KeyboardArrowDownIcon />
-              61
-            </div>
+            <div id="day3High">76</div>
+            <KeyboardArrowUpIcon />
+            <KeyboardArrowDownIcon />
+            <div id="day3Low">61</div>
           </div>
           <div id="day4">
             <p>Thursday</p>
-            <div>
-              <KeyboardArrowUpIcon />
-              76
-            </div>
-            <div>
-              <KeyboardArrowDownIcon />
-              61
-            </div>
+            <div id="day4High">76</div>
+            <KeyboardArrowUpIcon />
+            <KeyboardArrowDownIcon />
+            <div id="day4Low">61</div>
           </div>
           <div id="day5">
             <p>Friday</p>
-            <div>
-              <KeyboardArrowUpIcon />
-              76
-            </div>
-            <div>
-              <KeyboardArrowDownIcon />
-              61
-            </div>
+            <div id="day5High">76</div>
+            <KeyboardArrowUpIcon />
+            <KeyboardArrowDownIcon />
+            <div id="day5Low">61</div>
           </div>
         </div>
       </main>
