@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import "./index.css";
+import "../index.css";
 
 function DailyReport({ searchedCity }) {
   useEffect(() => {
@@ -32,11 +32,13 @@ function DailyReport({ searchedCity }) {
           // Process the fetched data
           console.log(data);
           updateHTML(data);
-          
+
           const temperature = data.current.temp_f;
           const backgroundColor = getBackgroundColor(temperature);
           // Apply the background color to your container
-          const weatherContainer = document.getElementById("mainContainer").style.backgroundColor = backgroundColor;
+          const weatherContainer = (document.getElementById(
+            "mainContainer"
+          ).style.backgroundColor = backgroundColor);
           weatherContainer.style.transition = "background-color 4s ease";
           weatherContainer.style.backgroundColor = backgroundColor;
         }
@@ -50,7 +52,7 @@ function DailyReport({ searchedCity }) {
 
   const getBackgroundColor = (temp) => {
     let backgroundColor = "";
-  
+
     switch (true) {
       case temp < 40:
         backgroundColor = "#264653";
@@ -67,7 +69,7 @@ function DailyReport({ searchedCity }) {
       default:
         backgroundColor = "white";
     }
-  
+
     return backgroundColor;
   };
 
@@ -90,15 +92,6 @@ function DailyReport({ searchedCity }) {
     const day2High = document.getElementById("day2High");
     const day2Low = document.getElementById("day2Low");
 
-    // const day3High = document.getElementById("day3High");
-    // const day3Low = document.getElementById("day3Low");
-
-    // const day4High = document.getElementById("day4High");
-    // const day4Low = document.getElementById("day4Low");
-
-    // const day5High = document.getElementById("day5High");
-    // const day5Low = document.getElementById("day5Low");
-
     //Convert time from Military time
     const localtime = (localTime.textContent = data.location.localtime);
     const timeParts = localtime.split(" ")[1].split(":");
@@ -118,7 +111,7 @@ function DailyReport({ searchedCity }) {
     cityState.textContent = data.location.region;
     localTime.textContent = `Local Time: ${formattedTime}`;
 
-    //Current Weather Data 
+    //Current Weather Data
     currentTemp.textContent = `${data.current.temp_f} F`;
 
     //Update the HTML content for 5 day Forcast Info
@@ -132,30 +125,29 @@ function DailyReport({ searchedCity }) {
   }
 
   return (
-    <div>
-      <main id="mainContainer" className="container mx-auto w-100vw bg-white p-6 rounded-lg shadow-lg">
-        <div className="locationContainer">
-          <p id="cityName" style={{ fontSize: 26 }}>
-            Denver
-          </p>
-          <p id="cityState">Colorado</p>
-          <p id="localTime">Monday 9:00 AM</p>
+    <div class="flex h-screen p-2">
+      <div class="w-1/3 h-full bg-gray-600 opacity-70 text-center">
+        <div class="h-3/5  ">
+        <p id="cityName" style={{ fontSize: 26 }}>
+        Denver
+      </p>
+      <p id="cityState">Colorado</p>
+      <p id="localTime">Monday 9:00 AM</p>
         </div>
+        <div class="h-2/5 ">Bottom Row</div>
+      </div>
+      <div class="w-3/5 h-full bg-gray-600 opacity-70">
+        <div class="h-3/5">Top Row</div>
+        <div class="h-2/5">Bottom Row</div>
+      </div>
+      <div class="w-1/4 h-full bg-gray-600 opacity-70">Column 3</div>
+    </div>
+  );
+}
+export { DailyReport };
 
-        <div className="dailyContainer">
-          <div id="currentTemps">
-            <div>
-              <KeyboardArrowUpIcon />
-              76
-            </div>
-            <p id="currentTemp" style={{ fontSize: 28 }}>74</p>
-            <div>
-              <KeyboardArrowDownIcon />
-              61
-            </div>
-          </div>
-        </div>
-        <div className="forecastContainer">
+{
+  /* <div className="forecastContainer">
           <div id="day1">
             <p>Monday</p>
             <div id="day1High">76</div>
@@ -191,9 +183,45 @@ function DailyReport({ searchedCity }) {
             <KeyboardArrowDownIcon />
             <div id="day5Low">61</div>
           </div>
-        </div>
-      </main>
-    </div>
-  );
+        </div> */
 }
-export { DailyReport };
+
+{
+  /* <div className="bg-blue-400 flex h-screen">
+<div
+  id="mainContainer"
+  className="container w-4/12 bg-white p-6 h-screen rounded-lg shadow-lg w-1/5 h-full bg-red-500"
+>
+  <section>
+    <div className="locationContainer">
+      <p id="cityName" style={{ fontSize: 26 }}>
+        Denver
+      </p>
+      <p id="cityState">Colorado</p>
+      <p id="localTime">Monday 9:00 AM</p>
+    </div>
+    <div className="dailyContainer">
+      <div id="currentTemps">
+        <div>
+          <KeyboardArrowUpIcon />
+          76
+        </div>
+        <p id="currentTemp" style={{ fontSize: 28 }}>
+          74
+        </p>
+        <div>
+          <KeyboardArrowDownIcon />
+          61
+        </div>
+      </div>
+    </div>
+  </section>
+  <section className="w-2/5 h-full bg-green-500">
+
+  </section>
+  <section className="bg-green-400">
+      
+  </section>
+</div>
+</div> */
+}
