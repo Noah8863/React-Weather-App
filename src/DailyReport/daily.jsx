@@ -14,7 +14,7 @@ function DailyReport({ searchedCity }) {
   const [localTime, setLocalTime] = useState("9:00 AM");
   const [weatherCondition, setWeatherCondition] = useState("Sunny");
   const [currentTemp, setCurrentTemp] = useState("78 F");
-  const [day1High, setDay1High] = useState("");
+  const [day1High, setDay1High] = useState("Monday");
   const [day1Low, setDay1Low] = useState("");
   const [day2High, setDay2High] = useState("");
   const [day2Low, setDay2Low] = useState("");
@@ -85,7 +85,15 @@ function DailyReport({ searchedCity }) {
   function updateHTML(data) {
     // Update the state variables with the fetched data
     setCityName(`${data.location.name}, ${data.location.region}`);
-    setLocalTime(data.location.localtime);
+
+    const time = data.location.localtime.split(" ")[1].split(":");
+    let hours = parseInt(time[0]);
+    const minutes = time[1];
+    // Convert the hours to 12-hour format
+    const meridiem = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // If hours is 0, set it to 12
+    const formattedTime = `${hours}:${minutes} ${meridiem}`;
+    setLocalTime(formattedTime);
 
     //Current Weather Data
     setCurrentTemp(`${data.current.temp_f} F`);
@@ -98,34 +106,20 @@ function DailyReport({ searchedCity }) {
     setDay2Low(data.forecast.forecastday[2].day.mintemp_f);
   }
 
-  useEffect(() => {
-    // Convert time from Military time
-    if (localTime) {
-      const timeParts = localTime.split(" ")[1].split(":");
-      // Split the time at ":" into hours and minutes
-      let hours = parseInt(timeParts[0]);
-      const minutes = timeParts[1];
-      // Convert the hours to 12-hour format
-      const meridiem = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12 || 12; // If hours is 0, set it to 12
-      const formattedTime = `${hours}:${minutes} ${meridiem}`;
-      setLocalTime(formattedTime);
-    }
-  }, [localTime]);
 
   return (
     <div className="flex h-screen p-2">
-      <div className="w-1/3 h-full bg-red-600 opacity-70 text-center">
+      <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
         <div className="h-3/5 ">
           <p className="text-2xl p-4">Location</p>
           <p id="cityName" className="text-2xl p-2">
             {cityName}
           </p>
-          <p id="currentTemp">{currentTemp}</p>
+          <p id="currentTemp" className="text-3xl p-8">{currentTemp}</p>
           <div className="flex justify-center my-8">
             {icon && <img src={icon} alt="Weather Icon" className="w-1/4" />}
           </div>
-          <p id="weatherCondition">{weatherCondition}</p>
+          <p id="weatherCondition" className="text-lg">{weatherCondition}</p>
         </div>
         <div className="h-2/5 ">Bottom Row</div>
       </div>
@@ -134,7 +128,7 @@ function DailyReport({ searchedCity }) {
         <div className="h-2/5">Bottom Row</div>
       </div>
       <div className="w-1/4 h-full bg-gray-600 opacity-70 flex-col flex justify-center items-center">
-        <div className="h-3/5 w-full bg-blue-400 flex justify-center items-center">
+        <div className="h-3/5 w-full  flex justify-center items-center">
           <p id="localTime" className="text-3xl text-center">
             {localTime}
           </p>
@@ -149,7 +143,7 @@ function DailyReport({ searchedCity }) {
 
 export { DailyReport };
 
-  /* <div className="forecastContainer">
+/* <div className="forecastContainer">
           <div id="day1">
             <p>Monday</p>
             <div id="day1High">76</div>
@@ -187,7 +181,7 @@ export { DailyReport };
           </div>
         </div> */
 
-  /* <div className="bg-blue-400 flex h-screen">
+/* <div className="bg-blue-400 flex h-screen">
 <div
   id="mainContainer"
   className="container w-4/12 bg-white p-6 h-screen rounded-lg shadow-lg w-1/5 h-full bg-red-500"
@@ -224,4 +218,3 @@ export { DailyReport };
   </section>
 </div>
 </div> */
-
