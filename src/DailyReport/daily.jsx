@@ -1,12 +1,19 @@
 import React, { useEffect } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import sunnyIcon from "../assets/sun.png";
+import cloudyIcon from "../assets/cloudy.png";
+import partlyCloudyIcon from "../assets/partlyCloudy.png";
+import rainyIcon from "../assets/rainy.png";
+import stormIcon from "../assets/storm.png";
 import "../index.css";
 
 function DailyReport({ searchedCity }) {
   useEffect(() => {
     fetchData(searchedCity);
   }, [searchedCity]);
+
+  let icon;
 
   const fetchData = (searchedCity) => {
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
@@ -30,47 +37,49 @@ function DailyReport({ searchedCity }) {
       .then((data) => {
         if (data) {
           // Process the fetched data
-          console.log(data);
-          updateHTML(data);
 
-          const temperature = data.current.temp_f;
-          const backgroundColor = getBackgroundColor(temperature);
-          // Apply the background color to your container
-          const weatherContainer = (document.getElementById(
-            "mainContainer"
-          ).style.backgroundColor = backgroundColor);
-          weatherContainer.style.transition = "background-color 4s ease";
-          weatherContainer.style.backgroundColor = backgroundColor;
+          console.log(data);
+
+          var weatherIcon = data.current.condition.text.toLowerCase();
+          console.log("weatherIcon value:", weatherIcon);
+
+          switch (weatherIcon) {
+            case "clear":
+              console.log("Setting icon to sunnyIcon");
+              icon = sunnyIcon;
+              console.log(icon);
+              break;
+            case "cloudy":
+              console.log("Setting icon to cloudyIcon");
+              icon = cloudyIcon;
+              console.log(icon);
+              break;
+            case "partly cloudy":
+              console.log("Setting icon to partlyCloudyIcon");
+              icon = partlyCloudyIcon;
+              console.log(icon);
+              break;
+            case "rainy":
+              console.log("Setting icon to rainyIcon");
+              icon = rainyIcon;
+              console.log(icon);
+              break;
+            case "storm":
+              console.log("Setting icon to stormIcon");
+              icon = stormIcon;
+              console.log(icon);
+              break;
+            default:
+              console.log("Unknown weather condition, setting icon to null");
+              icon = null; // Provide a default icon or handle the case when the condition is unknown
+          }
+          updateHTML(data);
         }
       })
       .catch((error) => {
         // Handle errors
-        console.error("Error:", error);
-        console.log("Response:", error.response);
+        console.log("Response:", error.text);
       });
-  };
-
-  const getBackgroundColor = (temp) => {
-    let backgroundColor = "";
-
-    switch (true) {
-      case temp < 40:
-        backgroundColor = "#264653";
-        break;
-      case temp >= 41 && temp <= 60:
-        backgroundColor = "#2A9D8F";
-        break;
-      case temp >= 61 && temp <= 80:
-        backgroundColor = "#F4A261";
-        break;
-      case temp >= 81 && temp <= 100:
-        backgroundColor = "#E76F51";
-        break;
-      default:
-        backgroundColor = "white";
-    }
-
-    return backgroundColor;
   };
 
   function updateHTML(data) {
@@ -78,6 +87,8 @@ function DailyReport({ searchedCity }) {
     const cityName = document.getElementById("cityName");
     const cityState = document.getElementById("cityState");
     const localTime = document.getElementById("localTime");
+
+    console.log(icon)
 
     //Current Temp from search
     const currentTemp = document.getElementById("currentTemp");
@@ -125,22 +136,23 @@ function DailyReport({ searchedCity }) {
   }
 
   return (
-    <div class="flex h-screen p-2">
-      <div class="w-1/3 h-full bg-gray-600 opacity-70 text-center">
-        <div class="h-3/5  ">
-        <p id="cityName" style={{ fontSize: 26 }}>
-        Denver
-      </p>
-      <p id="cityState">Colorado</p>
-      <p id="localTime">Monday 9:00 AM</p>
+    <div className="flex h-screen p-2">
+      <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
+        <div className="h-3/5  ">
+          <p id="cityName" style={{ fontSize: 26 }}>
+            Denver
+          </p>
+          <p id="cityState">Colorado</p>
+          <p id="localTime">Monday 9:00 AM</p>
+          <div>{icon && <img src={icon} alt="Weather Icon" />}</div>
         </div>
-        <div class="h-2/5 ">Bottom Row</div>
+        <div className="h-2/5 ">Bottom Row</div>
       </div>
-      <div class="w-3/5 h-full bg-gray-600 opacity-70">
-        <div class="h-3/5">Top Row</div>
-        <div class="h-2/5">Bottom Row</div>
+      <div className="w-2/5 h-full bg-gray-600 opacity-70">
+        <div className="h-3/5">Top Row</div>
+        <div className="h-2/5">Bottom Row</div>
       </div>
-      <div class="w-1/4 h-full bg-gray-600 opacity-70">Column 3</div>
+      <div className="w-1/4 h-full bg-gray-600 opacity-70">Column 3</div>
     </div>
   );
 }
