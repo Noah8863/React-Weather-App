@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useEffect, useState } from "react";
+// import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+// import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import sunnyIcon from "../assets/sun.png";
 import cloudyIcon from "../assets/cloudy.png";
 import partlyCloudyIcon from "../assets/partlyCloudy.png";
@@ -9,7 +9,16 @@ import stormIcon from "../assets/storm.png";
 import "../index.css";
 
 function DailyReport({ searchedCity }) {
-  const [icon, setIcon] = useState(null);
+  const [icon, setIcon] = useState(sunnyIcon);
+  const [cityName, setCityName] = useState("Denver, Colorado");
+  const [localTime, setLocalTime] = useState("9:00 AM");
+  const [weatherCondition, setWeatherCondition] = useState("Sunny");
+  const [currentTemp, setCurrentTemp] = useState("78 F");
+  const [day1High, setDay1High] = useState("");
+  const [day1Low, setDay1Low] = useState("");
+  const [day2High, setDay2High] = useState("");
+  const [day2Low, setDay2Low] = useState("");
+
   useEffect(() => {
     fetchData(searchedCity);
   }, [searchedCity]);
@@ -35,12 +44,12 @@ function DailyReport({ searchedCity }) {
       })
       .then((data) => {
         if (data) {
-          // Process the fetched data
-
           console.log(data);
-
           var weatherIcon = data.current.condition.text.toLowerCase();
           switch (weatherIcon) {
+            case "sunny":
+              setIcon(sunnyIcon);
+              break;
             case "clear":
               setIcon(sunnyIcon);
               break;
@@ -60,6 +69,10 @@ function DailyReport({ searchedCity }) {
               setIcon(null);
               break;
           }
+          setDay1High(data.forecast.forecastday[1].day.maxtemp_f);
+          setDay1Low(data.forecast.forecastday[1].day.mintemp_f);
+          setDay2High(data.forecast.forecastday[2].day.maxtemp_f);
+          setDay2Low(data.forecast.forecastday[2].day.mintemp_f);
           updateHTML(data);
         }
       })
@@ -70,68 +83,49 @@ function DailyReport({ searchedCity }) {
   };
 
   function updateHTML(data) {
-    //Current Searched City Data
-    const cityName = document.getElementById("cityName");
-    const cityState = document.getElementById("cityState");
-    const localTime = document.getElementById("localTime");
-
-    //Current Temp from search
-    const currentTemp = document.getElementById("currentTemp");
-    // const weatherIcon = document.getElementById("localTime");
-    // const windSpeed = document.getElementById("localTime");
-    // const UVIndex = document.getElementById("localTime");
-
-    //5 Day Forecast Variables
-    const day1High = document.getElementById("day1High");
-    const day1Low = document.getElementById("day1Low");
-
-    const day2High = document.getElementById("day2High");
-    const day2Low = document.getElementById("day2Low");
-
-    //Convert time from Military time
-    const localtime = (localTime.textContent = data.location.localtime);
-    const timeParts = localtime.split(" ")[1].split(":");
-    // Split the time at ":" into hours and minutes
-
-    let hours = parseInt(timeParts[0]);
-    const minutes = timeParts[1];
-
-    // Convert the hours to 12-hour format
-    const meridiem = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12; // If hours is 0, set it to 12
-
-    const formattedTime = `${hours}:${minutes} ${meridiem}`;
-
-    // Update the HTML content with the fetched data
-    cityName.textContent = data.location.name;
-    cityState.textContent = data.location.region;
-    localTime.textContent = `Local Time: ${formattedTime}`;
+    // Update the state variables with the fetched data
+    setCityName(`${data.location.name}, ${data.location.region}`);
+    setLocalTime(data.location.localtime);
 
     //Current Weather Data
-    currentTemp.textContent = `${data.current.temp_f} F`;
+    setCurrentTemp(`${data.current.temp_f} F`);
+    setWeatherCondition(`${data.current.condition.text}`);
 
-    //Update the HTML content for 5 day Forcast Info
-    day1High.textContent = data.forecast.forecastday[1].day.maxtemp_f;
-    day1Low.textContent = data.forecast.forecastday[1].day.mintemp_f;
-
-    day2High.textContent = data.forecast.forecastday[2].day.maxtemp_f;
-    day2Low.textContent = data.forecast.forecastday[2].day.mintemp_f;
-
-    // const weatherIcon = data.current.condition.icon
+    //Update the state variables for 5 day Forcast Info
+    setDay1High(data.forecast.forecastday[1].day.maxtemp_f);
+    setDay1Low(data.forecast.forecastday[1].day.mintemp_f);
+    setDay2High(data.forecast.forecastday[2].day.maxtemp_f);
+    setDay2Low(data.forecast.forecastday[2].day.mintemp_f);
   }
+
+  useEffect(() => {
+    // Convert time from Military time
+    if (localTime) {
+      const timeParts = localTime.split(" ")[1].split(":");
+      // Split the time at ":" into hours and minutes
+      let hours = parseInt(timeParts[0]);
+      const minutes = timeParts[1];
+      // Convert the hours to 12-hour format
+      const meridiem = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12; // If hours is 0, set it to 12
+      const formattedTime = `${hours}:${minutes} ${meridiem}`;
+      setLocalTime(formattedTime);
+    }
+  }, [localTime]);
 
   return (
     <div className="flex h-screen p-2">
       <div className="w-1/3 h-full bg-red-600 opacity-70 text-center">
         <div className="h-3/5 ">
-          <p id="cityName" style={{ fontSize: 26 }}>
-            Denver
+          <p className="text-2xl p-4">Location</p>
+          <p id="cityName" className="text-2xl p-2">
+            {cityName}
           </p>
-          <p id="cityState">Colorado</p>
-          <p id="localTime">Monday 9:00 AM</p>
+          <p id="currentTemp">{currentTemp}</p>
           <div className="flex justify-center my-8">
-            {icon && <img src={icon} alt="Weather Icon" className="w-24" />}
+            {icon && <img src={icon} alt="Weather Icon" className="w-1/4" />}
           </div>
+          <p id="weatherCondition">{weatherCondition}</p>
         </div>
         <div className="h-2/5 ">Bottom Row</div>
       </div>
@@ -139,13 +133,22 @@ function DailyReport({ searchedCity }) {
         <div className="h-3/5">Top Row</div>
         <div className="h-2/5">Bottom Row</div>
       </div>
-      <div className="w-1/4 h-full bg-gray-600 opacity-70">Column 3</div>
+      <div className="w-1/4 h-full bg-gray-600 opacity-70 flex-col flex justify-center items-center">
+        <div className="h-3/5 w-full bg-blue-400 flex justify-center items-center">
+          <p id="localTime" className="text-3xl text-center">
+            {localTime}
+          </p>
+        </div>
+        <div className="h-2/5 w-full">
+          <p>This will be another row</p>
+        </div>
+      </div>
     </div>
   );
 }
+
 export { DailyReport };
 
-{
   /* <div className="forecastContainer">
           <div id="day1">
             <p>Monday</p>
@@ -183,9 +186,7 @@ export { DailyReport };
             <div id="day5Low">61</div>
           </div>
         </div> */
-}
 
-{
   /* <div className="bg-blue-400 flex h-screen">
 <div
   id="mainContainer"
@@ -223,4 +224,4 @@ export { DailyReport };
   </section>
 </div>
 </div> */
-}
+
