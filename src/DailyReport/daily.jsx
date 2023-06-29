@@ -245,7 +245,7 @@ function DailyReport({ searchedCity }) {
           </p>
         </div>
         <div className="h-2/5 flex">
-          <div className="flex-grow bg-red-400 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
             <p>{day1}</p>
             {icon && (
               <img
@@ -261,7 +261,7 @@ function DailyReport({ searchedCity }) {
               <p><KeyboardArrowDownIcon />{day1Low}</p>
             </div>
           </div>
-          <div className="flex-grow bg-green-400 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
             <p>{day2}</p>
             {day2Icon && (
               <img
@@ -276,7 +276,7 @@ function DailyReport({ searchedCity }) {
               <p><KeyboardArrowDownIcon />{day2Low}</p>
             </div>
           </div>
-          <div className="flex-grow bg-pink-400 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
             <p>{day3}</p>
             {day3Icon && (
               <img
@@ -294,8 +294,10 @@ function DailyReport({ searchedCity }) {
         </div>
       </div>
       <div className="w-2/5 h-full bg-gray-600 opacity-70">
-        <div className="h-3/5">Top Row</div>
-        <div className="h-2/5">Bottom Row</div>
+        <div className="h-3/5">Image container here</div>
+        <div className="h-2/5">
+          
+        </div>
       </div>
       <div className="w-1/4 h-full bg-gray-600 opacity-70 flex-col flex justify-center items-center">
         <div className="h-3/5 w-full  flex justify-center items-center">
