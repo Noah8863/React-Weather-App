@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+import { render } from "react-dom";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import sunnyIcon from "../assets/sun.png";
-import cloudyIcon from "../assets/cloudy.png";
-import partlyCloudyIcon from "../assets/partlyCloudy.png";
-import rainyIcon from "../assets/rainy.png";
-import stormIcon from "../assets/storm.png";
-import "../index.css";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import ProgressProvider from "../ProgressProvider";
+import sunnyIcon from "../../assets/sun.png";
+import cloudyIcon from "../../assets/cloudy.png";
+import partlyCloudyIcon from "../../assets/partlyCloudy.png";
+import heavyRainIcon from "../../assets/heavyRain.png";
+import rainyIcon from "../../assets/rainy.png";
+import stormIcon from "../../assets/storm.png";
+import "../../index.css";
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
@@ -29,6 +34,8 @@ function DailyReport({ searchedCity }) {
   const [day2Low, setDay2Low] = useState("51");
   const [day3High, setDay3High] = useState("62");
   const [day3Low, setDay3Low] = useState("40");
+
+  const [valueEnd, setValueEnd] = useState(0);
 
   useEffect(() => {
     fetchData(searchedCity);
@@ -74,12 +81,18 @@ function DailyReport({ searchedCity }) {
             case "rainy":
               setIcon(rainyIcon);
               break;
+            case "moderate rain":
+              setIcon(rainyIcon);
+              break;
+            case "heavy rain":
+              setIcon(heavyRainIcon);
+              break;
             case "storm":
               setIcon(stormIcon);
               break;
             case "thundery outbreaks possible":
-                setIcon(stormIcon);
-                break;
+              setIcon(stormIcon);
+              break;
             case "overcast":
               setIcon(cloudyIcon);
               break;
@@ -105,11 +118,20 @@ function DailyReport({ searchedCity }) {
             case "cloudy":
               setDay2Icon(cloudyIcon);
               break;
+            case "overcast":
+              setDay2Icon(cloudyIcon);
+              break;
             case "partly cloudy":
               setDay2Icon(partlyCloudyIcon);
               break;
             case "moderate rain":
               setDay2Icon(rainyIcon);
+              break;
+            case "moderate rain":
+              setDay2Icon(rainyIcon);
+              break;
+            case "heavy rain":
+              setDay2Icon(heavyRainIcon);
               break;
             case "storm":
               setDay2Icon(stormIcon);
@@ -136,11 +158,17 @@ function DailyReport({ searchedCity }) {
             case "cloudy":
               setDay3Icon(cloudyIcon);
               break;
+            case "overcast":
+              setDay3Icon(cloudyIcon);
+              break;
             case "partly cloudy":
               setDay3Icon(partlyCloudyIcon);
               break;
             case "moderate rain":
               setDay3Icon(rainyIcon);
+              break;
+            case "heavy rain":
+              setDay3Icon(heavyRainIcon);
               break;
             case "storm":
               setDay3Icon(stormIcon);
@@ -210,12 +238,13 @@ function DailyReport({ searchedCity }) {
     // Convert the hours to 12-hour format
     const meridiem = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // If hours is 0, set it to 12
-    const formattedTime = `${hours}:${minutes} ${meridiem}`;
+    const formattedTime = `Local Time is ${hours}:${minutes} ${meridiem}`;
     setLocalTime(formattedTime);
 
     //Current Weather Data
     setCurrentTemp(`${data.current.temp_f} F`);
     setWeatherCondition(`${data.forecast.forecastday[0].day.condition.text}`);
+    setValueEnd(`${data.current.wind_mph}`)
 
     //Update the state variables for 5 day Forcast Info
     setDay1High(data.forecast.forecastday[0].day.maxtemp_f);
@@ -230,11 +259,10 @@ function DailyReport({ searchedCity }) {
     <div className="flex h-screen p-2">
       <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
         <div className="h-3/5 ">
-          <p className="text-xl p-4">Location</p>
           <p id="cityName" className="text-xxl p-2">
             {cityName}
           </p>
-          <p id="currentTemp" className="text-3xl p-8">
+          <p id="currentTemp" className="text-2xl p-2">
             {currentTemp}
           </p>
           <div className="flex justify-center my-8">
@@ -245,23 +273,26 @@ function DailyReport({ searchedCity }) {
           </p>
         </div>
         <div className="h-2/5 flex">
-          <div className="flex-grow bg-red-400 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow bg-pink-400 text-xl sm:text-2xl md:text-xl lg:text-xl xl:text-xl pt-8 flex flex-col items-center">
             <p>{day1}</p>
             {icon && (
-              <img
-                src={icon}
-                alt="Weather Icon"
-                className="h-20 w-20 m-auto"
-              />
+              <img src={icon} alt="Weather Icon" className="h-20 w-20 m-auto" />
             )}
-            <p className=" mb-20 sm:text-sm md:text-base lg:text-lg xl:text-xxl">{day1Description}</p>
+            <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl mb-8 text-center">
+              {day1Description}
+            </p>
             <div>
               <p>
-                <KeyboardArrowUpIcon />{day1High}</p>
-              <p><KeyboardArrowDownIcon />{day1Low}</p>
+                <KeyboardArrowUpIcon className="mr-1" />
+                {day1High}
+              </p>
+              <p>
+                <KeyboardArrowDownIcon className="mr-1" />
+                {day1Low}
+              </p>
             </div>
           </div>
-          <div className="flex-grow bg-green-400 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow bg-pink-400 text-xl sm:text-2xl md:text-xl lg:text-xl xl:text-xl pt-8 flex flex-col items-center">
             <p>{day2}</p>
             {day2Icon && (
               <img
@@ -270,14 +301,22 @@ function DailyReport({ searchedCity }) {
                 className="h-20 w-20 m-auto"
               />
             )}
-            <p className="sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-20">{day2Description}</p>
+            <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl mb-8 text-center">
+              {day2Description}
+            </p>
             <div>
-              <p><KeyboardArrowUpIcon />{day2High}</p>
-              <p><KeyboardArrowDownIcon />{day2Low}</p>
+              <p>
+                <KeyboardArrowUpIcon className="mr-1" />
+                {day2High}
+              </p>
+              <p>
+                <KeyboardArrowDownIcon className="mr-1" />
+                {day2Low}
+              </p>
             </div>
           </div>
-          <div className="flex-grow bg-pink-400 text-xxl pt-8 flex flex-col items-center">
-            <p>{day3}</p>
+          <div className="flex-grow bg-pink-400 text-xl sm:text-2xl md:text-xl lg:text-xl xl:text-xl pt-8 flex flex-col items-center">
+            <p className="mb-4">{day3}</p>
             {day3Icon && (
               <img
                 src={day3Icon}
@@ -285,26 +324,51 @@ function DailyReport({ searchedCity }) {
                 className="h-20 w-20 m-auto"
               />
             )}
-            <p className="sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-20">{day3Description}</p>
-            <div>
-              <p><KeyboardArrowUpIcon />{day3High}</p>
-              <p><KeyboardArrowDownIcon />{day3Low}</p>
+            <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl mb-8 text-center">
+              {day3Description}
+            </p>
+            <div className="flex flex-col items-center">
+              <p className="flex items-center">
+                <KeyboardArrowUpIcon className="mr-1" />
+                {day3High}
+              </p>
+              <p className="flex items-center">
+                <KeyboardArrowDownIcon className="mr-1" />
+                {day3Low}
+              </p>
             </div>
           </div>
         </div>
       </div>
       <div className="w-2/5 h-full bg-gray-600 opacity-70">
-        <div className="h-3/5">Top Row</div>
-        <div className="h-2/5">Bottom Row</div>
+        <div className="h-3/5">Image Container Here</div>
+        <div className="h-2/5">
+          <div>
+            <p>Humidity Progress Bar here</p>
+          </div>
+          <div>
+            <p>Wind Speed - Speedometer Here</p>
+          </div>
+          <div>
+            <p>UV Index Progress Bar here</p>
+          </div>
+        </div>
       </div>
       <div className="w-1/4 h-full bg-gray-600 opacity-70 flex-col flex justify-center items-center">
         <div className="h-3/5 w-full  flex justify-center items-center">
-          <p id="localTime" className="text-3xl text-center">
+          <p id="localTime" className="text-2xl text-center">
             {localTime}
           </p>
         </div>
         <div className="h-2/5 w-full">
-          <p>This will be another row</p>
+          {/* Custom component cannot use tailwind for styles... Weird but this in-line works fine */}
+          <div style={{ padding: "60px 60px 60px 60px", margin: "auto" }}>
+            <ProgressProvider valueStart={0} valueEnd={valueEnd}>
+              {(value) => (
+                <CircularProgressbar value={value} text={`${value} MPH`} />
+              )}
+            </ProgressProvider>
+          </div>
         </div>
       </div>
     </div>
