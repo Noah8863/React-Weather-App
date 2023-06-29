@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-// import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-// import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import sunnyIcon from "../assets/sun.png";
 import cloudyIcon from "../assets/cloudy.png";
 import partlyCloudyIcon from "../assets/partlyCloudy.png";
@@ -17,16 +17,18 @@ function DailyReport({ searchedCity }) {
   const [day1, setDay1] = useState("Monday");
   const [day2, setDay2] = useState("Tuesday");
   const [day3, setDay3] = useState("Wednesday");
-  const [day2Icon, setDay2Icon] = useState(cloudyIcon)
-  const [day3Icon, setDay3Icon] = useState(rainyIcon)
-  const [day1Description, setday1Description] = useState ("Sunny")
-  const [day2Description, setday2Description] = useState ("Cloudy")
-  const [day3Description, setday3Description] = useState ("Rainy")
+  const [day2Icon, setDay2Icon] = useState(cloudyIcon);
+  const [day3Icon, setDay3Icon] = useState(rainyIcon);
+  const [day1Description, setday1Description] = useState("Sunny");
+  const [day2Description, setday2Description] = useState("Cloudy");
+  const [day3Description, setday3Description] = useState("Rainy");
 
-  const [day1High, setDay1High] = useState("");
-  const [day1Low, setDay1Low] = useState("");
-  const [day2High, setDay2High] = useState("");
-  const [day2Low, setDay2Low] = useState("");
+  const [day1High, setDay1High] = useState("87");
+  const [day1Low, setDay1Low] = useState("71");
+  const [day2High, setDay2High] = useState("64");
+  const [day2Low, setDay2Low] = useState("51");
+  const [day3High, setDay3High] = useState("62");
+  const [day3Low, setDay3Low] = useState("40");
 
   useEffect(() => {
     fetchData(searchedCity);
@@ -51,13 +53,11 @@ function DailyReport({ searchedCity }) {
         }
         return response.json();
       })
-      // TODO Need to figure out conflicting weather reports 
-      // Current Weather does not match up with overall daily weather condintion
-      // Could make a 4th switch case JUST for the overall weather... uuuugh. sloppy code
       .then((data) => {
         if (data) {
           console.log(data);
-          var weatherIcon = data.forecast.forecastday[0].day.condition.text.toLowerCase();
+          var weatherIcon =
+            data.forecast.forecastday[0].day.condition.text.toLowerCase();
           switch (weatherIcon) {
             case "sunny":
               setIcon(sunnyIcon);
@@ -77,6 +77,9 @@ function DailyReport({ searchedCity }) {
             case "storm":
               setIcon(stormIcon);
               break;
+            case "thundery outbreaks possible":
+                setIcon(stormIcon);
+                break;
             case "overcast":
               setIcon(cloudyIcon);
               break;
@@ -87,7 +90,8 @@ function DailyReport({ searchedCity }) {
               setIcon(null);
               break;
           }
-          var secondWeatherIcon = data.forecast.forecastday[1].day.condition.text.toLowerCase();
+          var secondWeatherIcon =
+            data.forecast.forecastday[1].day.condition.text.toLowerCase();
           switch (secondWeatherIcon) {
             case "sunny":
               setDay2Icon(sunnyIcon);
@@ -103,18 +107,22 @@ function DailyReport({ searchedCity }) {
               break;
             case "partly cloudy":
               setDay2Icon(partlyCloudyIcon);
-              break
+              break;
             case "moderate rain":
               setDay2Icon(rainyIcon);
               break;
             case "storm":
               setDay2Icon(stormIcon);
               break;
+            case "thundery outbreaks possible":
+              setDay2Icon(stormIcon);
+              break;
             default:
               setDay2Icon(null);
               break;
           }
-          var thirdWeatherIcon = data.forecast.forecastday[2].day.condition.text.toLowerCase();
+          var thirdWeatherIcon =
+            data.forecast.forecastday[2].day.condition.text.toLowerCase();
           switch (thirdWeatherIcon) {
             case "sunny":
               setDay3Icon(sunnyIcon);
@@ -130,35 +138,47 @@ function DailyReport({ searchedCity }) {
               break;
             case "partly cloudy":
               setDay3Icon(partlyCloudyIcon);
-              break
+              break;
             case "moderate rain":
               setDay3Icon(rainyIcon);
               break;
             case "storm":
               setDay3Icon(stormIcon);
               break;
+            case "thundery outbreaks possible":
+              setDay3Icon(stormIcon);
+              break;
             default:
               setDay3Icon(null);
               break;
           }
-          const [year1, month1, day1] = data.forecast.forecastday[0].date.split("-");
+          const [year1, month1, day1] =
+            data.forecast.forecastday[0].date.split("-");
           const firstDateObj = new Date(year1, month1 - 1, day1);
-          const firstMonthName = firstDateObj.toLocaleString("en-US", { month: "long" });
+          const firstMonthName = firstDateObj.toLocaleString("en-US", {
+            month: "long",
+          });
           const firstFormattedDay = day1.padStart(2, "0");
           const firstFormattedDate = `${firstMonthName} ${firstFormattedDay}`;
           setDay1(firstFormattedDate);
 
-          const [year2, month2, day2] = data.forecast.forecastday[1].date.split("-");
+          const [year2, month2, day2] =
+            data.forecast.forecastday[1].date.split("-");
           const secondDateObj = new Date(year2, month2 - 1, day2);
-          const secondMonthName = secondDateObj.toLocaleString("en-US", { month: "long" });
+          const secondMonthName = secondDateObj.toLocaleString("en-US", {
+            month: "long",
+          });
           const secondFormattedDay = day2.padStart(2, "0");
           const secondFormattedDate = `${secondMonthName} ${secondFormattedDay}`;
           setDay2(secondFormattedDate);
 
-          const [year3, month3, day3] = data.forecast.forecastday[2].date.split("-");
+          const [year3, month3, day3] =
+            data.forecast.forecastday[2].date.split("-");
           const thirdDateObj = new Date(year3, month3 - 1, day3);
-          const thirdMonthName = thirdDateObj.toLocaleString("en-US", { month: "long" });
-          const thirdFormattedDay = day2.padStart(2, "0");
+          const thirdMonthName = thirdDateObj.toLocaleString("en-US", {
+            month: "long",
+          });
+          const thirdFormattedDay = day3.padStart(2, "0");
           const thirdFormattedDate = `${thirdMonthName} ${thirdFormattedDay}`;
           setDay3(thirdFormattedDate);
 
@@ -167,9 +187,9 @@ function DailyReport({ searchedCity }) {
           setDay2High(data.forecast.forecastday[2].day.maxtemp_f);
           setDay2Low(data.forecast.forecastday[2].day.mintemp_f);
 
-          setday1Description(data.forecast.forecastday[0].day.condition.text)
-          setday2Description(data.forecast.forecastday[1].day.condition.text)
-          setday3Description(data.forecast.forecastday[2].day.condition.text)
+          setday1Description(data.forecast.forecastday[0].day.condition.text);
+          setday2Description(data.forecast.forecastday[1].day.condition.text);
+          setday3Description(data.forecast.forecastday[2].day.condition.text);
 
           updateHTML(data);
         }
@@ -195,13 +215,15 @@ function DailyReport({ searchedCity }) {
 
     //Current Weather Data
     setCurrentTemp(`${data.current.temp_f} F`);
-    setWeatherCondition(`${data.current.condition.text}`);
+    setWeatherCondition(`${data.forecast.forecastday[0].day.condition.text}`);
 
     //Update the state variables for 5 day Forcast Info
-    setDay1High(data.forecast.forecastday[1].day.maxtemp_f);
-    setDay1Low(data.forecast.forecastday[1].day.mintemp_f);
-    setDay2High(data.forecast.forecastday[2].day.maxtemp_f);
-    setDay2Low(data.forecast.forecastday[2].day.mintemp_f);
+    setDay1High(data.forecast.forecastday[0].day.maxtemp_f);
+    setDay1Low(data.forecast.forecastday[0].day.mintemp_f);
+    setDay2High(data.forecast.forecastday[1].day.maxtemp_f);
+    setDay2Low(data.forecast.forecastday[1].day.mintemp_f);
+    setDay3High(data.forecast.forecastday[2].day.maxtemp_f);
+    setDay3Low(data.forecast.forecastday[2].day.mintemp_f);
   }
 
   return (
@@ -223,20 +245,51 @@ function DailyReport({ searchedCity }) {
           </p>
         </div>
         <div className="h-2/5 flex">
-          <div className="flex-grow bg-red-400 text-xxl pt-8">
+          <div className="flex-grow bg-red-400 text-xxl pt-8 flex flex-col items-center">
             <p>{day1}</p>
-            {icon && <img src={icon} alt="Weather Icon" className="h-16 w-16 m-auto mt-4" />}
-            <p className="text-xl pt-8">{day1Description}</p>
+            {icon && (
+              <img
+                src={icon}
+                alt="Weather Icon"
+                className="h-20 w-20 m-auto"
+              />
+            )}
+            <p className=" mb-20 sm:text-sm md:text-base lg:text-lg xl:text-xxl">{day1Description}</p>
+            <div>
+              <p>
+                <KeyboardArrowUpIcon />{day1High}</p>
+              <p><KeyboardArrowDownIcon />{day1Low}</p>
             </div>
-          <div className="flex-grow bg-green-400 text-xxl pt-8">
-          <p>{day2}</p>
-            {day2Icon && <img src={day2Icon} alt="Weather Icon" className="h-16 w-16 m-auto mt-4" />}
-            <p className="text-xl pt-8">{day2Description}</p>
           </div>
-          <div className="flex-grow bg-pink-400 text-xxl pt-8">
-          <p>{day3}</p>
-            {day3Icon && <img src={day3Icon} alt="Weather Icon" className="h-16 w-16 m-auto mt-4" />}
-            <p className="text-xl pt-8">{day3Description}</p>
+          <div className="flex-grow bg-green-400 text-xxl pt-8 flex flex-col items-center">
+            <p>{day2}</p>
+            {day2Icon && (
+              <img
+                src={day2Icon}
+                alt="Weather Icon"
+                className="h-20 w-20 m-auto"
+              />
+            )}
+            <p className="sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-20">{day2Description}</p>
+            <div>
+              <p><KeyboardArrowUpIcon />{day2High}</p>
+              <p><KeyboardArrowDownIcon />{day2Low}</p>
+            </div>
+          </div>
+          <div className="flex-grow bg-pink-400 text-xxl pt-8 flex flex-col items-center">
+            <p>{day3}</p>
+            {day3Icon && (
+              <img
+                src={day3Icon}
+                alt="Weather Icon"
+                className="h-20 w-20 m-auto"
+              />
+            )}
+            <p className="sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-20">{day3Description}</p>
+            <div>
+              <p><KeyboardArrowUpIcon />{day3High}</p>
+              <p><KeyboardArrowDownIcon />{day3Low}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -259,79 +312,3 @@ function DailyReport({ searchedCity }) {
 }
 
 export { DailyReport };
-
-/* <div className="forecastContainer">
-          <div id="day1">
-            <p>Monday</p>
-            <div id="day1High">76</div>
-            <KeyboardArrowUpIcon />
-            <KeyboardArrowDownIcon />
-            <div id="day1Low">61</div>
-          </div>
-          <div id="day2">
-            <p>Tuesday</p>
-            <div id="day2High">76</div>
-            <KeyboardArrowUpIcon />
-            <KeyboardArrowDownIcon />
-            <div id="day2Low">61</div>
-          </div>
-          <div id="day3">
-            <p>Wednsday</p>
-            <div id="day3High">76</div>
-            <KeyboardArrowUpIcon />
-            <KeyboardArrowDownIcon />
-            <div id="day3Low">61</div>
-          </div>
-          <div id="day4">
-            <p>Thursday</p>
-            <div id="day4High">76</div>
-            <KeyboardArrowUpIcon />
-            <KeyboardArrowDownIcon />
-            <div id="day4Low">61</div>
-          </div>
-          <div id="day5">
-            <p>Friday</p>
-            <div id="day5High">76</div>
-            <KeyboardArrowUpIcon />
-            <KeyboardArrowDownIcon />
-            <div id="day5Low">61</div>
-          </div>
-        </div> */
-
-/* <div className="bg-blue-400 flex h-screen">
-<div
-  id="mainContainer"
-  className="container w-4/12 bg-white p-6 h-screen rounded-lg shadow-lg w-1/5 h-full bg-red-500"
->
-  <section>
-    <div className="locationContainer">
-      <p id="cityName" style={{ fontSize: 26 }}>
-        Denver
-      </p>
-      <p id="cityState">Colorado</p>
-      <p id="localTime">Monday 9:00 AM</p>
-    </div>
-    <div className="dailyContainer">
-      <div id="currentTemps">
-        <div>
-          <KeyboardArrowUpIcon />
-          76
-        </div>
-        <p id="currentTemp" style={{ fontSize: 28 }}>
-          74
-        </p>
-        <div>
-          <KeyboardArrowDownIcon />
-          61
-        </div>
-      </div>
-    </div>
-  </section>
-  <section className="w-2/5 h-full bg-green-500">
-
-  </section>
-  <section className="bg-green-400">
-      
-  </section>
-</div>
-</div> */
