@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { render } from "react-dom";
+import UVIndexBar from "../UVProgressBar/UVIndex.jsx";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -19,6 +19,8 @@ function DailyReport({ searchedCity }) {
   const [localTime, setLocalTime] = useState("9:00 AM");
   const [weatherCondition, setWeatherCondition] = useState("Sunny");
   const [currentTemp, setCurrentTemp] = useState("78 F");
+  const [uvIndex, setUVIndex] = useState(null);
+  const [uvIndexDescription, setUVIndexDescription] = useState("UV Index");
   const [day1, setDay1] = useState("Monday");
   const [day2, setDay2] = useState("Tuesday");
   const [day3, setDay3] = useState("Wednesday");
@@ -180,6 +182,38 @@ function DailyReport({ searchedCity }) {
               setDay3Icon(null);
               break;
           }
+          var uvIndexDes = data.current.uv;
+          switch (uvIndexDes) {
+            case 1:
+            case 2:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 60 minutes to burn in the sun.`
+              );
+              break;
+            case 3:
+            case 4:
+            case 5:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 45 minutes to burn in the sun.`
+              );
+              break;
+            case 6:
+            case 7:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 30 minutes to burn in the sun.`
+              );
+              break;
+            case 8:
+            case 9:
+            case 10:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 15 minutes to burn in the sun! Stay inside`
+              );
+              break;
+            default:
+              setUVIndexDescription("1");
+              break;
+          }
           const [year1, month1, day1] =
             data.forecast.forecastday[0].date.split("-");
           const firstDateObj = new Date(year1, month1 - 1, day1);
@@ -219,6 +253,8 @@ function DailyReport({ searchedCity }) {
           setday2Description(data.forecast.forecastday[1].day.condition.text);
           setday3Description(data.forecast.forecastday[2].day.condition.text);
 
+          setUVIndex(data.current.uv);
+
           updateHTML(data);
         }
       })
@@ -244,7 +280,7 @@ function DailyReport({ searchedCity }) {
     //Current Weather Data
     setCurrentTemp(`${data.current.temp_f} F`);
     setWeatherCondition(`${data.forecast.forecastday[0].day.condition.text}`);
-    setValueEnd(`${data.current.wind_mph}`)
+    setValueEnd(`${data.current.wind_mph}`);
 
     //Update the state variables for 5 day Forcast Info
     setDay1High(data.forecast.forecastday[0].day.maxtemp_f);
@@ -350,7 +386,8 @@ function DailyReport({ searchedCity }) {
             <p>Wind Speed - Speedometer Here</p>
           </div>
           <div>
-            <p>UV Index Progress Bar here</p>
+            <p>{uvIndexDescription}</p>
+            <UVIndexBar uvIndex={uvIndex} />
           </div>
         </div>
       </div>
