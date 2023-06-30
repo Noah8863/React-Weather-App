@@ -13,6 +13,8 @@ import heavyRainIcon from "../../assets/heavyRain.png";
 import rainyIcon from "../../assets/rainy.png";
 import stormIcon from "../../assets/storm.png";
 import "../../index.css";
+const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
+const SECRET_KEY = process.env.REACT_APP_UNSPLASH_SECRET_KEY;
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
@@ -43,9 +45,23 @@ function DailyReport({ searchedCity }) {
 
   const [valueEnd, setValueEnd] = useState(0);
 
+  // useEffect(() => {
+  //   fetchData(searchedCity);
+  // }, [searchedCity]);
+
   useEffect(() => {
     fetchData(searchedCity);
+    fetchCityImage(searchedCity)
+      .then((imageUrl) => {
+        console.log("City Image URL:", imageUrl);
+        // Perform further actions with the image URL if needed
+      })
+      .catch((error) => {
+        console.error("Failed to fetch city image:", error);
+      });
   }, [searchedCity]);
+
+  
 
   const fetchData = (searchedCity) => {
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
@@ -285,6 +301,28 @@ function DailyReport({ searchedCity }) {
       });
   };
 
+  const fetchCityImage = async (searchedCity) => {
+    const query = encodeURIComponent(searchedCity);
+
+    try {
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}`
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        // Get the first image from the response
+        const imageUrl = data.results[0].urls.regular;
+        return imageUrl;
+      } else {
+        throw new Error("Failed to fetch city image");
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
   function updateHTML(data) {
     // Update the state variables with the fetched data
     setCityName(`${data.location.name}, ${data.location.region}`);
@@ -419,7 +457,7 @@ function DailyReport({ searchedCity }) {
         </div>
         <div className="h-2/5 w-full">
           {/* Custom component cannot use tailwind for styles... Weird but this in-line works fine */}
-          <div style={{ padding: "60px 60px 60px 60px", margin: "auto" }}>
+          <div style={{ padding: "65px 65px 65px 65px", margin: "auto" }}>
             <ProgressProvider valueStart={0} valueEnd={valueEnd}>
               {(value) => (
                 <CircularProgressbar value={value} text={`${value} MPH`} />
