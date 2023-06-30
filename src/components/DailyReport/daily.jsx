@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
+import UVIndexBar from "../UVProgressBar/UVIndex.jsx";
+import HumidityProgressBar from "../HumidityProgBar/humidity.jsx";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import sunnyIcon from "../assets/sun.png";
-import cloudyIcon from "../assets/cloudy.png";
-import partlyCloudyIcon from "../assets/partlyCloudy.png";
-import rainyIcon from "../assets/rainy.png";
-import stormIcon from "../assets/storm.png";
-import "../index.css";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import ProgressProvider from "../ProgressProvider";
+import sunnyIcon from "../../assets/sun.png";
+import cloudyIcon from "../../assets/cloudy.png";
+import partlyCloudyIcon from "../../assets/partlyCloudy.png";
+import heavyRainIcon from "../../assets/heavyRain.png";
+import rainyIcon from "../../assets/rainy.png";
+import stormIcon from "../../assets/storm.png";
+import "../../index.css";
+const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
+const SECRET_KEY = process.env.REACT_APP_UNSPLASH_SECRET_KEY;
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
@@ -14,6 +22,11 @@ function DailyReport({ searchedCity }) {
   const [localTime, setLocalTime] = useState("9:00 AM");
   const [weatherCondition, setWeatherCondition] = useState("Sunny");
   const [currentTemp, setCurrentTemp] = useState("78 F");
+  const [uvIndex, setUVIndex] = useState(null);
+  const [uvIndexDescription, setUVIndexDescription] = useState("UV Index");
+  const [humidityIndex, setHumidityIndex] = useState(null);
+  const [humidityIndexDescription, setHumidityIndexDescription] =
+    useState("Humidity Index");
   const [day1, setDay1] = useState("Monday");
   const [day2, setDay2] = useState("Tuesday");
   const [day3, setDay3] = useState("Wednesday");
@@ -30,9 +43,25 @@ function DailyReport({ searchedCity }) {
   const [day3High, setDay3High] = useState("62");
   const [day3Low, setDay3Low] = useState("40");
 
+  const [valueEnd, setValueEnd] = useState(0);
+
+  // useEffect(() => {
+  //   fetchData(searchedCity);
+  // }, [searchedCity]);
+
   useEffect(() => {
     fetchData(searchedCity);
+    fetchCityImage(searchedCity)
+      .then((imageUrl) => {
+        console.log("City Image URL:", imageUrl);
+        // Perform further actions with the image URL if needed
+      })
+      .catch((error) => {
+        console.error("Failed to fetch city image:", error);
+      });
   }, [searchedCity]);
+
+  
 
   const fetchData = (searchedCity) => {
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
@@ -74,12 +103,18 @@ function DailyReport({ searchedCity }) {
             case "rainy":
               setIcon(rainyIcon);
               break;
+            case "moderate rain":
+              setIcon(rainyIcon);
+              break;
+            case "heavy rain":
+              setIcon(heavyRainIcon);
+              break;
             case "storm":
               setIcon(stormIcon);
               break;
             case "thundery outbreaks possible":
-                setIcon(stormIcon);
-                break;
+              setIcon(stormIcon);
+              break;
             case "overcast":
               setIcon(cloudyIcon);
               break;
@@ -105,11 +140,20 @@ function DailyReport({ searchedCity }) {
             case "cloudy":
               setDay2Icon(cloudyIcon);
               break;
+            case "overcast":
+              setDay2Icon(cloudyIcon);
+              break;
             case "partly cloudy":
               setDay2Icon(partlyCloudyIcon);
               break;
             case "moderate rain":
               setDay2Icon(rainyIcon);
+              break;
+            case "moderate rain":
+              setDay2Icon(rainyIcon);
+              break;
+            case "heavy rain":
+              setDay2Icon(heavyRainIcon);
               break;
             case "storm":
               setDay2Icon(stormIcon);
@@ -136,11 +180,17 @@ function DailyReport({ searchedCity }) {
             case "cloudy":
               setDay3Icon(cloudyIcon);
               break;
+            case "overcast":
+              setDay3Icon(cloudyIcon);
+              break;
             case "partly cloudy":
               setDay3Icon(partlyCloudyIcon);
               break;
             case "moderate rain":
               setDay3Icon(rainyIcon);
+              break;
+            case "heavy rain":
+              setDay3Icon(heavyRainIcon);
               break;
             case "storm":
               setDay3Icon(stormIcon);
@@ -152,6 +202,54 @@ function DailyReport({ searchedCity }) {
               setDay3Icon(null);
               break;
           }
+          var uvIndexDes = data.current.uv;
+          switch (uvIndexDes) {
+            case 1:
+            case 2:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 60 minutes to burn in the sun.`
+              );
+              break;
+            case 3:
+            case 4:
+            case 5:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 45 minutes to burn in the sun.`
+              );
+              break;
+            case 6:
+            case 7:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 30 minutes to burn in the sun.`
+              );
+              break;
+            case 8:
+            case 9:
+            case 10:
+              setUVIndexDescription(
+                `The UV Index is ${data.current.uv} which takes 15 minutes to burn in the sun! Stay inside`
+              );
+              break;
+            default:
+              setUVIndexDescription("1");
+              break;
+          }
+
+          var humidityIndexDes = data.current.humidity;
+          if (humidityIndexDes >= 20 && humidityIndexDes <= 60) {
+            setHumidityIndexDescription(
+              `The humidity level is ${data.current.humidity} which is comfortable! 😄`
+            );
+          } else if (humidityIndexDes > 60) {
+            setHumidityIndexDescription(
+              `The humidity level is ${data.current.humidity} which uncomfortably wet and sticky 😖`
+            );
+          } else {
+            setHumidityIndexDescription(
+              `The humidity level is ${data.current.humidity} which uncomfortably dry 🥵`
+            );
+          }
+
           const [year1, month1, day1] =
             data.forecast.forecastday[0].date.split("-");
           const firstDateObj = new Date(year1, month1 - 1, day1);
@@ -191,6 +289,9 @@ function DailyReport({ searchedCity }) {
           setday2Description(data.forecast.forecastday[1].day.condition.text);
           setday3Description(data.forecast.forecastday[2].day.condition.text);
 
+          setUVIndex(data.current.uv);
+          setHumidityIndex(data.current.humidity);
+
           updateHTML(data);
         }
       })
@@ -198,6 +299,28 @@ function DailyReport({ searchedCity }) {
         // Handle errors
         console.log("Response:", error.text);
       });
+  };
+
+  const fetchCityImage = async (searchedCity) => {
+    const query = encodeURIComponent(searchedCity);
+
+    try {
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}`
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        // Get the first image from the response
+        const imageUrl = data.results[0].urls.regular;
+        return imageUrl;
+      } else {
+        throw new Error("Failed to fetch city image");
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   };
 
   function updateHTML(data) {
@@ -210,12 +333,13 @@ function DailyReport({ searchedCity }) {
     // Convert the hours to 12-hour format
     const meridiem = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // If hours is 0, set it to 12
-    const formattedTime = `${hours}:${minutes} ${meridiem}`;
+    const formattedTime = `Local Time is ${hours}:${minutes} ${meridiem}`;
     setLocalTime(formattedTime);
 
     //Current Weather Data
     setCurrentTemp(`${data.current.temp_f} F`);
     setWeatherCondition(`${data.forecast.forecastday[0].day.condition.text}`);
+    setValueEnd(`${data.current.wind_mph}`);
 
     //Update the state variables for 5 day Forcast Info
     setDay1High(data.forecast.forecastday[0].day.maxtemp_f);
@@ -230,11 +354,10 @@ function DailyReport({ searchedCity }) {
     <div className="flex h-screen p-2">
       <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
         <div className="h-3/5 ">
-          <p className="text-xl p-4">Location</p>
           <p id="cityName" className="text-xxl p-2">
             {cityName}
           </p>
-          <p id="currentTemp" className="text-3xl p-8">
+          <p id="currentTemp" className="text-2xl p-2">
             {currentTemp}
           </p>
           <div className="flex justify-center my-8">
@@ -248,17 +371,20 @@ function DailyReport({ searchedCity }) {
           <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
             <p>{day1}</p>
             {icon && (
-              <img
-                src={icon}
-                alt="Weather Icon"
-                className="h-20 w-20 m-auto"
-              />
+              <img src={icon} alt="Weather Icon" className="h-20 w-20 m-auto" />
             )}
-            <p className=" mb-20 sm:text-sm md:text-base lg:text-lg xl:text-xxl">{day1Description}</p>
+            <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl mb-8 text-center">
+              {day1Description}
+            </p>
             <div>
               <p>
-                <KeyboardArrowUpIcon />{day1High}</p>
-              <p><KeyboardArrowDownIcon />{day1Low}</p>
+                <KeyboardArrowUpIcon className="mr-1" />
+                {day1High}
+              </p>
+              <p>
+                <KeyboardArrowDownIcon className="mr-1" />
+                {day1Low}
+              </p>
             </div>
           </div>
           <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
@@ -270,14 +396,22 @@ function DailyReport({ searchedCity }) {
                 className="h-20 w-20 m-auto"
               />
             )}
-            <p className="sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-20">{day2Description}</p>
+            <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl mb-8 text-center">
+              {day2Description}
+            </p>
             <div>
-              <p><KeyboardArrowUpIcon />{day2High}</p>
-              <p><KeyboardArrowDownIcon />{day2Low}</p>
+              <p>
+                <KeyboardArrowUpIcon className="mr-1" />
+                {day2High}
+              </p>
+              <p>
+                <KeyboardArrowDownIcon className="mr-1" />
+                {day2Low}
+              </p>
             </div>
           </div>
-          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
-            <p>{day3}</p>
+          <div className="flex-grow bg-pink-400 text-xl sm:text-2xl md:text-xl lg:text-xl xl:text-xl pt-8 flex flex-col items-center">
+            <p className="mb-4">{day3}</p>
             {day3Icon && (
               <img
                 src={day3Icon}
@@ -285,28 +419,51 @@ function DailyReport({ searchedCity }) {
                 className="h-20 w-20 m-auto"
               />
             )}
-            <p className="sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-20">{day3Description}</p>
-            <div>
-              <p><KeyboardArrowUpIcon />{day3High}</p>
-              <p><KeyboardArrowDownIcon />{day3Low}</p>
+            <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xl mb-8 text-center">
+              {day3Description}
+            </p>
+            <div className="flex flex-col items-center">
+              <p className="flex items-center">
+                <KeyboardArrowUpIcon className="mr-1" />
+                {day3High}
+              </p>
+              <p className="flex items-center">
+                <KeyboardArrowDownIcon className="mr-1" />
+                {day3Low}
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="w-2/5 h-full bg-gray-600 opacity-70">
-        <div className="h-3/5">Image container here</div>
+      <div className="w-2/5 h-full bg-gray-600 opacity-70 p-10">
+        <div className="h-3/5">Image Container Here</div>
         <div className="h-2/5">
-          
+          <div className="pt-20">
+            <p className="p-2">{humidityIndexDescription}</p>
+            <HumidityProgressBar humidityIndex={humidityIndex} />
+          </div>
+          <br></br>
+          <div>
+            <p className="p-2">{uvIndexDescription}</p>
+            <UVIndexBar uvIndex={uvIndex} />
+          </div>
         </div>
       </div>
       <div className="w-1/4 h-full bg-gray-600 opacity-70 flex-col flex justify-center items-center">
         <div className="h-3/5 w-full  flex justify-center items-center">
-          <p id="localTime" className="text-3xl text-center">
+          <p id="localTime" className="text-2xl text-center">
             {localTime}
           </p>
         </div>
         <div className="h-2/5 w-full">
-          <p>This will be another row</p>
+          {/* Custom component cannot use tailwind for styles... Weird but this in-line works fine */}
+          <div style={{ padding: "65px 65px 65px 65px", margin: "auto" }}>
+            <ProgressProvider valueStart={0} valueEnd={valueEnd}>
+              {(value) => (
+                <CircularProgressbar value={value} text={`${value} MPH`} />
+              )}
+            </ProgressProvider>
+          </div>
         </div>
       </div>
     </div>
