@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import UVIndexBar from "../UVProgressBar/UVIndex.jsx";
+import HumidityProgressBar from "../HumidityProgBar/humidity.jsx";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -21,6 +22,9 @@ function DailyReport({ searchedCity }) {
   const [currentTemp, setCurrentTemp] = useState("78 F");
   const [uvIndex, setUVIndex] = useState(null);
   const [uvIndexDescription, setUVIndexDescription] = useState("UV Index");
+  const [humidityIndex, setHumidityIndex] = useState(null);
+  const [humidityIndexDescription, setHumidityIndexDescription] =
+    useState("Humidity Index");
   const [day1, setDay1] = useState("Monday");
   const [day2, setDay2] = useState("Tuesday");
   const [day3, setDay3] = useState("Wednesday");
@@ -214,6 +218,22 @@ function DailyReport({ searchedCity }) {
               setUVIndexDescription("1");
               break;
           }
+
+          var humidityIndexDes = data.current.humidity;
+          if (humidityIndexDes >= 20 && humidityIndexDes <= 60) {
+            setHumidityIndexDescription(
+              `The humidity level is ${data.current.humidity} which is comfortable! 😄`
+            );
+          } else if (humidityIndexDes > 60) {
+            setHumidityIndexDescription(
+              `The humidity level is ${data.current.humidity} which uncomfortably wet and sticky 😖`
+            );
+          } else {
+            setHumidityIndexDescription(
+              `The humidity level is ${data.current.humidity} which uncomfortably dry 🥵`
+            );
+          }
+
           const [year1, month1, day1] =
             data.forecast.forecastday[0].date.split("-");
           const firstDateObj = new Date(year1, month1 - 1, day1);
@@ -254,6 +274,7 @@ function DailyReport({ searchedCity }) {
           setday3Description(data.forecast.forecastday[2].day.condition.text);
 
           setUVIndex(data.current.uv);
+          setHumidityIndex(data.current.humidity);
 
           updateHTML(data);
         }
@@ -376,17 +397,16 @@ function DailyReport({ searchedCity }) {
           </div>
         </div>
       </div>
-      <div className="w-2/5 h-full bg-gray-600 opacity-70">
+      <div className="w-2/5 h-full bg-gray-600 opacity-70 p-10">
         <div className="h-3/5">Image Container Here</div>
         <div className="h-2/5">
-          <div>
-            <p>Humidity Progress Bar here</p>
+          <div className="pt-20">
+            <p className="p-2">{humidityIndexDescription}</p>
+            <HumidityProgressBar humidityIndex={humidityIndex} />
           </div>
+          <br></br>
           <div>
-            <p>Wind Speed - Speedometer Here</p>
-          </div>
-          <div>
-            <p>{uvIndexDescription}</p>
+            <p className="p-2">{uvIndexDescription}</p>
             <UVIndexBar uvIndex={uvIndex} />
           </div>
         </div>
