@@ -13,8 +13,7 @@ import heavyRainIcon from "../../assets/heavyRain.png";
 import rainyIcon from "../../assets/rainy.png";
 import stormIcon from "../../assets/storm.png";
 import "../../index.css";
-// import dotenv from 'dotenv';
-// dotenv.config();
+const ACCESS_KEY = 'jJL2psRWWH6HJUjkaLq12qanq7ilvNNcJB-gn50ZJkU'
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
@@ -35,6 +34,7 @@ function DailyReport({ searchedCity }) {
   const [day1Description, setday1Description] = useState("Sunny");
   const [day2Description, setday2Description] = useState("Cloudy");
   const [day3Description, setday3Description] = useState("Rainy");
+  const [cityImage, setCityImage] = useState("")
 
   const [day1High, setDay1High] = useState("87");
   const [day1Low, setDay1Low] = useState("71");
@@ -303,13 +303,14 @@ function DailyReport({ searchedCity }) {
 
     try {
       const response = await fetch(
-        `https://api.unsplash.com/search/photos?query=${query}&client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}`
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${ACCESS_KEY}`
       );
       const data = await response.json();
 
       if (response.ok) {
         // Get the first image from the response
         const imageUrl = data.results[0].urls.regular;
+        setCityImage(imageUrl)
         return imageUrl;
       } else {
         throw new Error("Failed to fetch city image");
@@ -432,8 +433,10 @@ function DailyReport({ searchedCity }) {
           </div>
         </div>
       </div>
-      <div className="w-2/5 h-full bg-gray-600 opacity-70 p-10">
-        <div className="h-3/5">Image Container Here</div>
+      <div className="w-2/5 h-full bg-gray-600 p-10">
+        <div className="h-3/5 flex items-center justify-center">
+        {cityImage && <img src={cityImage} alt="Weather Icon" className="max-h-full max-w-full opacity-100"/>}
+        </div>
         <div className="h-2/5">
           <div className="pt-20">
             <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">{humidityIndexDescription}</p>
