@@ -16,7 +16,7 @@ const UVIndexProgressBar = ({ uvIndex }) => {
         if (currentPercentage >= targetPercentage) {
           clearInterval(interval);
         }
-      }, 10);
+      }, 10); 
     };
 
     animateProgressBar();
