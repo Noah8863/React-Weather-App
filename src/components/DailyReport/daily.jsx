@@ -13,8 +13,7 @@ import heavyRainIcon from "../../assets/heavyRain.png";
 import rainyIcon from "../../assets/rainy.png";
 import stormIcon from "../../assets/storm.png";
 import "../../index.css";
-const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
-const SECRET_KEY = process.env.REACT_APP_UNSPLASH_SECRET_KEY;
+
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
@@ -145,9 +144,6 @@ function DailyReport({ searchedCity }) {
               break;
             case "partly cloudy":
               setDay2Icon(partlyCloudyIcon);
-              break;
-            case "moderate rain":
-              setDay2Icon(rainyIcon);
               break;
             case "moderate rain":
               setDay2Icon(rainyIcon);
