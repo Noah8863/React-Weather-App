@@ -13,7 +13,8 @@ import heavyRainIcon from "../../assets/heavyRain.png";
 import rainyIcon from "../../assets/rainy.png";
 import stormIcon from "../../assets/storm.png";
 import "../../index.css";
-
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
@@ -363,7 +364,7 @@ function DailyReport({ searchedCity }) {
             {weatherCondition}
           </p>
         </div>
-        <div className="h-2/5 flex">
+        <div className="h-2/5 flex p-4">
           <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
             <p>{day1}</p>
             {icon && (
@@ -406,8 +407,8 @@ function DailyReport({ searchedCity }) {
               </p>
             </div>
           </div>
-          <div className="flex-grow bg-pink-400 text-xl sm:text-2xl md:text-xl lg:text-xl xl:text-xl pt-8 flex flex-col items-center">
-            <p className="mb-4">{day3}</p>
+          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
+            <p className="mb-4 text-xxl">{day3}</p>
             {day3Icon && (
               <img
                 src={day3Icon}
@@ -435,12 +436,12 @@ function DailyReport({ searchedCity }) {
         <div className="h-3/5">Image Container Here</div>
         <div className="h-2/5">
           <div className="pt-20">
-            <p className="p-2">{humidityIndexDescription}</p>
+            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">{humidityIndexDescription}</p>
             <HumidityProgressBar humidityIndex={humidityIndex} />
           </div>
           <br></br>
           <div>
-            <p className="p-2">{uvIndexDescription}</p>
+            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">{uvIndexDescription}</p>
             <UVIndexBar uvIndex={uvIndex} />
           </div>
         </div>
@@ -453,14 +454,16 @@ function DailyReport({ searchedCity }) {
         </div>
         <div className="h-2/5 w-full">
           {/* Custom component cannot use tailwind for styles... Weird but this in-line works fine */}
-          <div style={{ padding: "65px 65px 65px 65px", margin: "auto" }}>
+          <div style={{ padding: "25%", margin: "auto", }}>
             <ProgressProvider valueStart={0} valueEnd={valueEnd}>
               {(value) => (
                 <CircularProgressbar value={value} text={`${value} MPH`} />
               )}
             </ProgressProvider>
           </div>
+          
         </div>
+        <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-8 mt-2 text-center">Current Wind Speed</p>
       </div>
     </div>
   );
