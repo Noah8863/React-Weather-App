@@ -40,7 +40,7 @@ const HumidityProgressBar = ({ humidityIndex }) => {
           style={{
             width: `${progressPercentage}%`,
             transition: "width 1s ease-out", // Add transition animation
-            maxWidth: "100%", // Ensure the progress bar stays within the bar
+            // Ensure the progress bar stays within the bar
           }}
         />
       </div>

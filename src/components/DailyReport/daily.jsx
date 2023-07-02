@@ -349,8 +349,8 @@ function DailyReport({ searchedCity }) {
   }
 
   return (
-    <div className="flex h-screen p-2">
-      <div className="w-1/3 h-full bg-gray-600 opacity-70 text-center">
+    <div className="flex h-screen bg-blue-300">
+      <div className="w-1/3 h-full text-center">
         <div className="h-3/5 ">
           <p id="cityName" className="text-xxl p-2">
             {cityName}
@@ -366,7 +366,7 @@ function DailyReport({ searchedCity }) {
           </p>
         </div>
         <div className="h-2/5 flex p-4">
-          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow text-xxl pt-8 flex flex-col items-center">
             <p>{day1}</p>
             {icon && (
               <img src={icon} alt="Weather Icon" className="h-20 w-20 m-auto" />
@@ -385,7 +385,7 @@ function DailyReport({ searchedCity }) {
               </p>
             </div>
           </div>
-          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow  text-xxl pt-8 flex flex-col items-center">
             <p>{day2}</p>
             {day2Icon && (
               <img
@@ -408,7 +408,7 @@ function DailyReport({ searchedCity }) {
               </p>
             </div>
           </div>
-          <div className="flex-grow bg-gray-600 text-xxl pt-8 flex flex-col items-center">
+          <div className="flex-grow text-xxl pt-8 flex flex-col items-center">
             <p className="mb-4 text-xxl">{day3}</p>
             {day3Icon && (
               <img
@@ -433,12 +433,12 @@ function DailyReport({ searchedCity }) {
           </div>
         </div>
       </div>
-      <div className="w-2/5 h-full bg-gray-600 p-10">
+      <div className="w-2/5 h-full p-10">
         <div className="h-3/5 flex items-center justify-center">
-        {cityImage && <img src={cityImage} alt="Weather Icon" className="max-h-full max-w-full opacity-100"/>}
+        {cityImage && <img src={cityImage} alt="Weather Icon" className="max-h-full max-w-full"/>}
         </div>
-        <div className="h-2/5">
-          <div className="pt-20">
+        <div className="h-2/5 pt-2 flex flex-col items-center justify-center">
+          <div>
             <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">{humidityIndexDescription}</p>
             <HumidityProgressBar humidityIndex={humidityIndex} />
           </div>
@@ -449,7 +449,7 @@ function DailyReport({ searchedCity }) {
           </div>
         </div>
       </div>
-      <div className="w-1/4 h-full bg-gray-600 opacity-70 flex-col flex justify-center items-center">
+      <div className="w-1/4 h-full flex-col flex justify-center items-center">
         <div className="h-3/5 w-full  flex justify-center items-center">
           <p id="localTime" className="text-2xl text-center">
             {localTime}
