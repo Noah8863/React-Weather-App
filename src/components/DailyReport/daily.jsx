@@ -357,7 +357,7 @@ function DailyReport({ searchedCity }) {
             {cityName}
           </p>
           <div className="flex items-center">
-            <p id="currentTemp" className="text-superText p-2 sm:text-base md:text-xl lg:text-2xl xl:text-superText inline-block">
+            <p id="currentTemp" className="p-2 sm:text-base md:text-xl lg:text-2xl xl:text-superText inline-block">
               {currentTemp}
             </p>
             <span className="text-xxl ml-2 mb-16 inline-block ">°F</span>
