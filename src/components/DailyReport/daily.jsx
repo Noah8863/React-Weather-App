@@ -21,6 +21,7 @@ function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
   const [cityName, setCityName] = useState("Denver, Colorado");
   const [localTime, setLocalTime] = useState("9:00 AM");
+  const [localCountry, setLocalCountry] = useState('United States of America')
   const [weatherCondition, setWeatherCondition] = useState("Sunny");
   const [currentTemp, setCurrentTemp] = useState("78");
   const [uvIndex, setUVIndex] = useState(4);
@@ -287,6 +288,7 @@ function DailyReport({ searchedCity }) {
 
           setUVIndex(data.current.uv);
           setHumidityIndex(data.current.humidity);
+          setLocalCountry(data.location.country)
 
           updateHTML(data);
         }
@@ -302,8 +304,7 @@ function DailyReport({ searchedCity }) {
 
     try {
       const response = await fetch(
-        // `https://api.unsplash.com/search/photos?query=${query}&client_id=${ACCESS_KEY}`
-        `https://api.unspla=${query}&client_`
+        `https://api.unsplash.com/search/photos?query=${query}&client_id=${ACCESS_KEY}`
       );
       const data = await response.json();
 
@@ -331,7 +332,7 @@ function DailyReport({ searchedCity }) {
     // Convert the hours to 12-hour format
     const meridiem = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // If hours is 0, set it to 12
-    const formattedTime = `Local Time is ${hours}:${minutes} ${meridiem}`;
+    const formattedTime = `${hours}:${minutes} ${meridiem}`;
     setLocalTime(formattedTime);
 
     //Current Weather Data
@@ -349,14 +350,14 @@ function DailyReport({ searchedCity }) {
   }
 
   return (
-    <div className="flex h-screen bg-black-300 text-slate-50">
+    <div className="flex h-screen  text-slate-50 bg-gradient-to-b from-blue-900 to-gray-100 min-h-screen">
       <div className="w-1/3 h-full text-center p-3">
         <div className="h-3/5  flex flex-col items-center justify-center bg-blue-400 bg-opacity-40 rounded-[28px]">
-          <p id="cityName" className="text-xxl p-4 mb-10">
+          <p id="cityName" className="p-4 mb-10 sm:text-lg md:text-xl lg:text-2xl xl:text-xxl">
             {cityName}
           </p>
           <div className="flex items-center">
-            <p id="currentTemp" className="text-superText p-2  inline-block">
+            <p id="currentTemp" className="p-2 sm:text-base md:text-xl lg:text-2xl xl:text-superText inline-block">
               {currentTemp}
             </p>
             <span className="text-xxl ml-2 mb-16 inline-block ">°F</span>
@@ -365,7 +366,7 @@ function DailyReport({ searchedCity }) {
           <div className="flex justify-center my-10">
             {icon && <img src={icon} alt="Weather Icon" className="w-1/4" />}
           </div>
-          <p id="weatherCondition" className="text-xxl">
+          <p id="weatherCondition" className="sm:text-lg md:text-xl lg:text-2xl xl:text-xl">
             {weatherCondition}
           </p>
         </div>
@@ -465,11 +466,16 @@ function DailyReport({ searchedCity }) {
         </div>
       </div>
       <div className="w-1/4 h-full flex-col flex justify-center items-center p-3">
-        <div className="h-3/5 w-full flex justify-center items-center bg-blue-400 bg-opacity-40 rounded-[28px]">
-          <p id="localTime" className="text-2xl text-center">
+        <div className="h-3/5 w-full flex flex-col justify-center items-center bg-blue-400 bg-opacity-40 rounded-[28px]">
+          <p id="localTimeLabel" className="text-2xl text-center">
+            Local Time:
+          </p>
+          <p id="localTime" className="text-superText sm:text-lg md:text-xl lg:text-2xl xl:text-superText text-center">
             {localTime}
           </p>
+          <p className="pt-8 text-xl">{localCountry}</p>
         </div>
+
         <div className="h-2/5 w-full bg-blue-400 bg-opacity-40 rounded-[28px] m-4">
           <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl text-center p-4">
             Current Wind Speed
