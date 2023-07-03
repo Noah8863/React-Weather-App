@@ -13,17 +13,19 @@ import heavyRainIcon from "../../assets/heavyRain.png";
 import rainyIcon from "../../assets/rainy.png";
 import stormIcon from "../../assets/storm.png";
 import "../../index.css";
-const ACCESS_KEY = 'jJL2psRWWH6HJUjkaLq12qanq7ilvNNcJB-gn50ZJkU'
+const ACCESS_KEY = "jJL2psRWWH6HJUjkaLq12qanq7ilvNNcJB-gn50ZJkU";
+const startImage =
+  "https://images.unsplash.com/photo-1573297627466-6bed413a43f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Njc5OTd8MHwxfHNlYXJjaHwxfHxEZW52ZXJ8ZW58MHx8fHwxNjg4NDEyNTg2fDA&ixlib=rb-4.0.3&q=80&w=1080";
 
 function DailyReport({ searchedCity }) {
   const [icon, setIcon] = useState(sunnyIcon);
   const [cityName, setCityName] = useState("Denver, Colorado");
   const [localTime, setLocalTime] = useState("9:00 AM");
   const [weatherCondition, setWeatherCondition] = useState("Sunny");
-  const [currentTemp, setCurrentTemp] = useState("78 F");
-  const [uvIndex, setUVIndex] = useState(null);
+  const [currentTemp, setCurrentTemp] = useState("78");
+  const [uvIndex, setUVIndex] = useState(4);
   const [uvIndexDescription, setUVIndexDescription] = useState("UV Index");
-  const [humidityIndex, setHumidityIndex] = useState(null);
+  const [humidityIndex, setHumidityIndex] = useState(74);
   const [humidityIndexDescription, setHumidityIndexDescription] =
     useState("Humidity Index");
   const [day1, setDay1] = useState("Monday");
@@ -34,7 +36,7 @@ function DailyReport({ searchedCity }) {
   const [day1Description, setday1Description] = useState("Sunny");
   const [day2Description, setday2Description] = useState("Cloudy");
   const [day3Description, setday3Description] = useState("Rainy");
-  const [cityImage, setCityImage] = useState("")
+  const [cityImage, setCityImage] = useState(startImage);
 
   const [day1High, setDay1High] = useState("87");
   const [day1Low, setDay1Low] = useState("71");
@@ -61,11 +63,8 @@ function DailyReport({ searchedCity }) {
       });
   }, [searchedCity]);
 
-  
-
   const fetchData = (searchedCity) => {
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
-    // const url = `https://weatherapi-com.p.rapid`;
 
     const options = {
       method: "GET",
@@ -303,14 +302,15 @@ function DailyReport({ searchedCity }) {
 
     try {
       const response = await fetch(
-        `https://api.unsplash.com/search/photos?query=${query}&client_id=${ACCESS_KEY}`
+        // `https://api.unsplash.com/search/photos?query=${query}&client_id=${ACCESS_KEY}`
+        `https://api.unspla=${query}&client_`
       );
       const data = await response.json();
 
       if (response.ok) {
         // Get the first image from the response
         const imageUrl = data.results[0].urls.regular;
-        setCityImage(imageUrl)
+        setCityImage(imageUrl);
         return imageUrl;
       } else {
         throw new Error("Failed to fetch city image");
@@ -335,7 +335,7 @@ function DailyReport({ searchedCity }) {
     setLocalTime(formattedTime);
 
     //Current Weather Data
-    setCurrentTemp(`${data.current.temp_f} F`);
+    setCurrentTemp(`${data.current.temp_f}`);
     setWeatherCondition(`${data.forecast.forecastday[0].day.condition.text}`);
     setValueEnd(`${data.current.wind_mph}`);
 
@@ -349,23 +349,28 @@ function DailyReport({ searchedCity }) {
   }
 
   return (
-    <div className="flex h-screen bg-blue-300">
-      <div className="w-1/3 h-full text-center">
-        <div className="h-3/5 ">
-          <p id="cityName" className="text-xxl p-2">
+    <div className="flex h-screen bg-black-300 text-slate-50">
+      <div className="w-1/3 h-full text-center p-3">
+        <div className="h-3/5  flex flex-col items-center justify-center bg-blue-400 bg-opacity-40 rounded-[28px]">
+          <p id="cityName" className="text-xxl p-4 mb-10">
             {cityName}
           </p>
-          <p id="currentTemp" className="text-2xl p-2">
-            {currentTemp}
-          </p>
-          <div className="flex justify-center my-8">
+          <div className="flex items-center">
+            <p id="currentTemp" className="text-superText p-2  inline-block">
+              {currentTemp}
+            </p>
+            <span className="text-xxl ml-2 mb-16 inline-block ">°F</span>
+          </div>
+
+          <div className="flex justify-center my-10">
             {icon && <img src={icon} alt="Weather Icon" className="w-1/4" />}
           </div>
           <p id="weatherCondition" className="text-xxl">
             {weatherCondition}
           </p>
         </div>
-        <div className="h-2/5 flex p-4">
+
+        <div className="h-2/5 flex p-4 bg-blue-400 bg-opacity-40 rounded-[28px] mt-4">
           <div className="flex-grow text-xxl pt-8 flex flex-col items-center">
             <p>{day1}</p>
             {icon && (
@@ -434,39 +439,49 @@ function DailyReport({ searchedCity }) {
         </div>
       </div>
       <div className="w-2/5 h-full p-10">
-        <div className="h-3/5 flex items-center justify-center">
-        {cityImage && <img src={cityImage} alt="Weather Icon" className="max-h-full max-w-full"/>}
+        <div className="h-3/5 flex items-center justify-center bg-blue-400 bg-opacity-40 rounded-[28px] p-4">
+          {cityImage && (
+            <img
+              src={cityImage}
+              alt="Weather Icon"
+              className="max-h-full max-w-full"
+            />
+          )}
         </div>
-        <div className="h-2/5 pt-2 flex flex-col items-center justify-center">
+        <div className="h-2/5 p-3 flex flex-col items-center justify-center bg-blue-400 bg-opacity-40 rounded-[28px] mt-8">
           <div>
-            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">{humidityIndexDescription}</p>
+            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">
+              {humidityIndexDescription}
+            </p>
             <HumidityProgressBar humidityIndex={humidityIndex} />
           </div>
           <br></br>
           <div>
-            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">{uvIndexDescription}</p>
+            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">
+              {uvIndexDescription}
+            </p>
             <UVIndexBar uvIndex={uvIndex} />
           </div>
         </div>
       </div>
-      <div className="w-1/4 h-full flex-col flex justify-center items-center">
-        <div className="h-3/5 w-full  flex justify-center items-center">
+      <div className="w-1/4 h-full flex-col flex justify-center items-center p-3">
+        <div className="h-3/5 w-full flex justify-center items-center bg-blue-400 bg-opacity-40 rounded-[28px]">
           <p id="localTime" className="text-2xl text-center">
             {localTime}
           </p>
         </div>
-        <div className="h-2/5 w-full">
-          {/* Custom component cannot use tailwind for styles... Weird but this in-line works fine */}
-          <div style={{ padding: "25%", margin: "auto", }}>
+        <div className="h-2/5 w-full bg-blue-400 bg-opacity-40 rounded-[28px] m-4">
+          <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl text-center p-4">
+            Current Wind Speed
+          </p>
+          <div className="h-full flex items-center" style={{ padding: "30%" }}>
             <ProgressProvider valueStart={0} valueEnd={valueEnd}>
               {(value) => (
                 <CircularProgressbar value={value} text={`${value} MPH`} />
               )}
             </ProgressProvider>
           </div>
-          
         </div>
-        <p className="text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl mb-8 mt-2 text-center">Current Wind Speed</p>
       </div>
     </div>
   );
