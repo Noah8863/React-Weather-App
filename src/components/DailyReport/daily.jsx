@@ -372,7 +372,7 @@ function DailyReport({ searchedCity }) {
 
         <div className="h-2/5 flex p-4 bg-blue-400 bg-opacity-40 rounded-[28px] mt-4">
           <div className="flex-grow text-xxl pt-8 flex flex-col items-center">
-            <p>{day1}</p>
+            <p className="text-xl">{day1}</p>
             {icon && (
               <img src={icon} alt="Weather Icon" className="h-20 w-20 m-auto" />
             )}
@@ -391,7 +391,7 @@ function DailyReport({ searchedCity }) {
             </div>
           </div>
           <div className="flex-grow  text-xxl pt-8 flex flex-col items-center">
-            <p>{day2}</p>
+            <p className="text-xl">{day2}</p>
             {day2Icon && (
               <img
                 src={day2Icon}
@@ -414,7 +414,7 @@ function DailyReport({ searchedCity }) {
             </div>
           </div>
           <div className="flex-grow text-xxl pt-8 flex flex-col items-center">
-            <p className="mb-4 text-xxl">{day3}</p>
+            <p className="text-xl">{day3}</p>
             {day3Icon && (
               <img
                 src={day3Icon}
