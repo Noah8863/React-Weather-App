@@ -25,14 +25,14 @@ function NavBar({ setSearchedCity }) {
     <header className="bg-gray-800">
       <div className="container mx-auto px-4 py-6 flex items-center justify-between">
         <div>
-          <h1 className="text-white font-bold text-xl">Weather Report</h1>
+          <h1 className="text-white font-bold text-xxl">Weather Report</h1>
         </div>
         <div>
           <form className="flex items-center" onSubmit={handleSubmit}>
             <input
               type="search"
               className="bg-gray-700 text-white px-4 py-2 rounded-l-lg focus:outline-none"
-              placeholder="Search"
+              placeholder="City Name..."
               value={searchValue}
               onChange={handleChange}
             />
