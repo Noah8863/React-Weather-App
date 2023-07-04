@@ -451,14 +451,14 @@ function DailyReport({ searchedCity }) {
         </div>
         <div className="h-2/5 p-3 flex flex-col items-center justify-center bg-blue-400 bg-opacity-40 rounded-[28px] mt-8">
           <div>
-            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">
+            <p className="p-4 sm:text-xs md:tex-sm lg:text-lg xl:text-xxl">
               {humidityIndexDescription}
             </p>
             <HumidityProgressBar humidityIndex={humidityIndex} />
           </div>
           <br></br>
           <div>
-            <p className="p-4 text-base sm:text-sm md:text-base lg:text-lg xl:text-xxl">
+            <p className="p-4 sm:text-xs md:text-sm lg:text-lg xl:text-xxl">
               {uvIndexDescription}
             </p>
             <UVIndexBar uvIndex={uvIndex} />

@@ -15,7 +15,7 @@ module.exports = {
         'xxl': '1.75rem',
         '2xl': '2rem',
         '3xl': '3.5rem',
-        'superText': '6rem',
+        'superText': '5rem',
       },
     },
   },
