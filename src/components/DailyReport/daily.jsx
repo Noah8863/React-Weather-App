@@ -48,10 +48,8 @@ function DailyReport({ searchedCity }) {
 
   const [valueEnd, setValueEnd] = useState(0);
 
-  // useEffect(() => {
-  //   fetchData(searchedCity);
-  // }, [searchedCity]);
-
+  
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchData(searchedCity);
     fetchCityImage(searchedCity)
@@ -64,9 +62,10 @@ function DailyReport({ searchedCity }) {
       });
   }, [searchedCity]);
 
+  
+
   const fetchData = (searchedCity) => {
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${searchedCity}&days=6`;
-
     const options = {
       method: "GET",
       headers: {
