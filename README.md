@@ -2,12 +2,16 @@
 [![Project Version][version-image]][version-url]
 [![Frontend][Frontend-image]][Frontend-url]
 
+
 ---
 ## About Project 
 
 The Weather Dashboard is a React.js application that provides users with real-time weather information and forecasts for various locations. It utilizes the "Weather" API to fetch data such as temperature, local time/location, UV Index, humidity, and a regional forecast for the next few days. By integrating the Unsplash API, the dashboard also displays captivating images related to the searched city, creating an immersive visual experience.
 
 Built with React.js and Tailwind.css, the Weather Dashboard combines the power of a modern JavaScript framework with a highly customizable and responsive CSS utility library. The use of React.js allows for efficient component-based development, while Tailwind.css simplifies styling and layout design. Whether you're a weather enthusiast or simply want to stay informed about current weather conditions, this dashboard provides an intuitive and visually appealing interface for accessing accurate and up-to-date weather data.
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/461258df-d2ec-473d-b620-0f18d3b85cfe/deploy-status)](https://app.netlify.com/sites/weather-dashboard-with-react/deploys)
+### Deployed Site: https://weather-dashboard-with-react.netlify.app/ 
 
 ---
 
