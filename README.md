@@ -53,7 +53,7 @@ Built with React.js and Tailwind.css, the Weather Dashboard combines the power o
 
 ## Contributing
 
-1. Fork it (https://github.com/Noah8863/Portfolio.git)
+1. Fork it (https://github.com/Noah8863/React-Weather-App)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
